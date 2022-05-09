@@ -1,4 +1,7 @@
+using System;
 using System.Collections.Generic;
+using Mirror;
+using Networking;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -9,6 +12,12 @@ namespace Units
         [SerializeField]
         private LayerMask layerMask;
 
+        [SerializeField]
+        private RectTransform unitSelectionArea = null;
+
+        private Vector2 _startPosition;
+
+        private RTSPlayer _player;
         private Camera _mainCamera;
         public List<Unit> selectedUnits { get; } = new List<Unit>();
 
@@ -19,40 +28,92 @@ namespace Units
 
         private void Update()
         {
+            //TODO move this logic to lobby
+            if (!_player)
+            {
+                _player = NetworkClient.connection.identity.GetComponent<RTSPlayer>();
+            }
+
             if (Mouse.current.leftButton.wasPressedThisFrame)
             {
-                foreach (Unit selected in selectedUnits)
-                {
-                    selected.Deselect();
-                }
-                selectedUnits.Clear();
+                StartSelectionArea();
             }
             else if (Mouse.current.leftButton.wasReleasedThisFrame)
             {
                 ClearSelectionArea();
             }
+            else if (Mouse.current.leftButton.isPressed)
+            {
+                UpdateSelectionArea();
+            }
+        }
+
+        private void StartSelectionArea()
+        {
+            foreach (Unit selected in selectedUnits)
+            {
+                selected.Deselect();
+            }
+            selectedUnits.Clear();
+            unitSelectionArea.gameObject.SetActive(true);
+            _startPosition = Mouse.current.position.ReadValue();
+            UpdateSelectionArea();
+        }
+
+        private void UpdateSelectionArea()
+        {
+            Vector2 mousePosition = Mouse.current.position.ReadValue();
+
+            float areaWidth = mousePosition.x - _startPosition.x;
+            float areaHeight = mousePosition.y - _startPosition.y;
+
+            unitSelectionArea.sizeDelta = new Vector2(Mathf.Abs(areaWidth), Mathf.Abs(areaHeight));
+            unitSelectionArea.anchoredPosition =
+                _startPosition + new Vector2(areaWidth / 2, areaHeight / 2);
         }
 
         private void ClearSelectionArea()
         {
-            Ray ray = _mainCamera.ScreenPointToRay(Mouse.current.position.ReadValue());
-            if (!Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity))
+            unitSelectionArea.gameObject.SetActive(false);
+            if (unitSelectionArea.sizeDelta.magnitude == 0)
             {
-                return;
-            }
-            if (!hit.collider.TryGetComponent<Unit>(out Unit unit))
-            {
+                Ray ray = _mainCamera.ScreenPointToRay(Mouse.current.position.ReadValue());
+                if (!Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity))
+                {
+                    return;
+                }
+                if (!hit.collider.TryGetComponent<Unit>(out Unit unit))
+                {
+                    return;
+                }
+
+                if (!unit.hasAuthority)
+                {
+                    return;
+                }
+                selectedUnits.Add(unit);
+                foreach (Unit selected in selectedUnits)
+                {
+                    selected.Select();
+                }
                 return;
             }
 
-            if (!unit.hasAuthority)
+            Vector2 min = unitSelectionArea.anchoredPosition - (unitSelectionArea.sizeDelta / 2);
+            Vector2 max = unitSelectionArea.anchoredPosition + (unitSelectionArea.sizeDelta / 2);
+            foreach (Unit unit in _player.GetUnits())
             {
-                return;
-            }
-            selectedUnits.Add(unit);
-            foreach (Unit selected in selectedUnits)
-            {
-                selected.Select();
+                Vector3 screenPosition = _mainCamera.WorldToScreenPoint(unit.transform.position);
+                if (
+                    screenPosition.x > min.x
+                    && screenPosition.y > min.y
+                    && screenPosition.x < max.x
+                    && screenPosition.y < max.y
+                )
+                {
+                    selectedUnits.Add(unit);
+                    unit.Select();
+                }
             }
         }
     }

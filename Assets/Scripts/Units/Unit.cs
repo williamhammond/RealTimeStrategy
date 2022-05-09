@@ -16,10 +16,33 @@ namespace Units
         [SerializeField]
         private UnitMovement _unitMovement = null;
 
+        public static event Action<Unit> ServerOnUnitSpawned;
+        public static event Action<Unit> ServerOnUnitDespawned;
+
+        public static event Action<Unit> AuthorityOnUnitSpawned;
+        public static event Action<Unit> AuthorityOnUnitDespawned;
+
         public UnitMovement GetUnitMovement()
         {
             return _unitMovement;
         }
+
+        #region Server
+
+        public override void OnStartServer()
+        {
+            base.OnStartServer();
+            ServerOnUnitSpawned?.Invoke(this);
+        }
+
+        public override void OnStopServer()
+        {
+            base.OnStopClient();
+            ServerOnUnitDespawned?.Invoke(this);
+        }
+
+        #endregion
+
 
         #region Client
 
@@ -43,10 +66,24 @@ namespace Units
 
         #endregion
 
-        #region Server
+        public override void OnStartClient()
+        {
+            base.OnStartClient();
+            if (!isClientOnly || !hasAuthority)
+            {
+                return;
+            }
+            AuthorityOnUnitSpawned?.Invoke(this);
+        }
 
-
-
-        #endregion
+        public override void OnStopClient()
+        {
+            base.OnStopClient();
+            if (!isClientOnly || !hasAuthority)
+            {
+                return;
+            }
+            AuthorityOnUnitDespawned?.Invoke(this);
+        }
     }
 }
