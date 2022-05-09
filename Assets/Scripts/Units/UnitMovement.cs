@@ -8,6 +8,16 @@ public class UnitMovement : NetworkBehaviour
     private NavMeshAgent agent = null;
 
     #region Server
+
+    [ServerCallback]
+    private void Update()
+    {
+        if (agent.hasPath && agent.remainingDistance <= agent.stoppingDistance)
+        {
+            agent.ResetPath();
+        }
+    }
+
     [Command]
     public void CmdMove(Vector3 moveTo)
     {
