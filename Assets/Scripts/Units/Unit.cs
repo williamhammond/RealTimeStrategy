@@ -1,4 +1,5 @@
-﻿using Mirror;
+﻿using System;
+using Mirror;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -11,6 +12,14 @@ namespace Units
 
         [SerializeField]
         private UnityEvent onDeselected = null;
+
+        [SerializeField]
+        private UnitMovement _unitMovement = null;
+
+        public UnitMovement GetUnitMovement()
+        {
+            return _unitMovement;
+        }
 
         #region Client
 

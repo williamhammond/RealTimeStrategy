@@ -10,7 +10,7 @@ namespace Units
         private LayerMask layerMask;
 
         private Camera _mainCamera;
-        private readonly List<Unit> _selectedUnits = new List<Unit>();
+        public List<Unit> selectedUnits { get; } = new List<Unit>();
 
         private void Start()
         {
@@ -21,11 +21,11 @@ namespace Units
         {
             if (Mouse.current.leftButton.wasPressedThisFrame)
             {
-                foreach (Unit selected in _selectedUnits)
+                foreach (Unit selected in selectedUnits)
                 {
                     selected.Deselect();
                 }
-                _selectedUnits.Clear();
+                selectedUnits.Clear();
             }
             else if (Mouse.current.leftButton.wasReleasedThisFrame)
             {
@@ -49,8 +49,8 @@ namespace Units
             {
                 return;
             }
-            _selectedUnits.Add(unit);
-            foreach (Unit selected in _selectedUnits)
+            selectedUnits.Add(unit);
+            foreach (Unit selected in selectedUnits)
             {
                 selected.Select();
             }
