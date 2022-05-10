@@ -1,4 +1,6 @@
 using System;
+using Cinemachine;
+using Combat;
 using Units;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -30,7 +32,23 @@ public class UnitCommandHandler : MonoBehaviour
             return;
         }
 
+        if (hit.collider.TryGetComponent<Targetable>(out Targetable target))
+        {
+            if (!target.hasAuthority)
+            {
+                TryTarget(target);
+                return;
+            }
+        }
         TryMove(hit.point);
+    }
+
+    private void TryTarget(Targetable target)
+    {
+        foreach (Unit unit in _unitSelectionHandler.selectedUnits)
+        {
+            unit.GetTargeter().CmdSetTarget(target.gameObject);
+        }
     }
 
     private void TryMove(Vector3 point)

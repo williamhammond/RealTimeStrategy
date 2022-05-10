@@ -1,4 +1,5 @@
 ﻿using System;
+using Combat;
 using Mirror;
 using UnityEngine;
 using UnityEngine.Events;
@@ -14,7 +15,10 @@ namespace Units
         private UnityEvent onDeselected = null;
 
         [SerializeField]
-        private UnitMovement _unitMovement = null;
+        private UnitMovement unitMovement = null;
+
+        [SerializeField]
+        private Targeter targeter = null;
 
         public static event Action<Unit> ServerOnUnitSpawned;
         public static event Action<Unit> ServerOnUnitDespawned;
@@ -22,9 +26,14 @@ namespace Units
         public static event Action<Unit> AuthorityOnUnitSpawned;
         public static event Action<Unit> AuthorityOnUnitDespawned;
 
+        public Targeter GetTargeter()
+        {
+            return targeter;
+        }
+
         public UnitMovement GetUnitMovement()
         {
-            return _unitMovement;
+            return unitMovement;
         }
 
         #region Server
