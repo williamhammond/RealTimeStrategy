@@ -1,3 +1,4 @@
+using Combat;
 using Mirror;
 using UnityEngine;
 
@@ -13,6 +14,9 @@ namespace Units
 
         [SerializeField]
         private float launchForce = 10f;
+
+        [SerializeField]
+        private int damage = 20;
 
         public override void OnStartServer()
         {
@@ -31,6 +35,21 @@ namespace Units
         }
 
         [ServerCallback]
-        void OnTriggerEnter(Collider co) => DestroySelf();
+        void OnTriggerEnter(Collider other)
+        {
+            if (other.TryGetComponent<NetworkIdentity>(out NetworkIdentity networkIdentity))
+            {
+                if (networkIdentity.connectionToClient == connectionToClient)
+                {
+                    return;
+                }
+
+                if (other.TryGetComponent<Health>(out Health health))
+                {
+                    health.DealDamage(damage);
+                }
+            }
+            DestroySelf();
+        }
     }
 }
