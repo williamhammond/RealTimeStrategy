@@ -79,7 +79,7 @@ BoxCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2890316655692537878}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
@@ -101,6 +101,7 @@ MonoBehaviour:
   unitPrefab: {fileID: 3983402270335598966, guid: edd7162420faa754fb576bf2280a2ca9,
     type: 3}
   unitSpawnPoint: {fileID: 8172781726495406912}
+  health: {fileID: 1288370964734471889}
 --- !u!114 &3969392166096391352
 MonoBehaviour:
   m_ObjectHideFlags: 0

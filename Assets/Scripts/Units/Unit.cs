@@ -20,6 +20,9 @@ namespace Units
         [SerializeField]
         private Targeter targeter = null;
 
+        [SerializeField]
+        private Health health;
+
         public static event Action<Unit> ServerOnUnitSpawned;
         public static event Action<Unit> ServerOnUnitDespawned;
 
@@ -42,12 +45,20 @@ namespace Units
         {
             base.OnStartServer();
             ServerOnUnitSpawned?.Invoke(this);
+            health.ServerOnDie += ServerHandleDie;
         }
 
         public override void OnStopServer()
         {
             base.OnStopClient();
             ServerOnUnitDespawned?.Invoke(this);
+            health.ServerOnDie -= ServerHandleDie;
+        }
+
+        [Server]
+        private void ServerHandleDie()
+        {
+            NetworkServer.Destroy(gameObject);
         }
 
         #endregion
@@ -75,20 +86,16 @@ namespace Units
 
         #endregion
 
-        public override void OnStartClient()
+        public override void OnStartAuthority()
         {
-            base.OnStartClient();
-            if (!isClientOnly || !hasAuthority)
-            {
-                return;
-            }
+            base.OnStartAuthority();
             AuthorityOnUnitSpawned?.Invoke(this);
         }
 
         public override void OnStopClient()
         {
             base.OnStopClient();
-            if (!isClientOnly || !hasAuthority)
+            if (!hasAuthority)
             {
                 return;
             }

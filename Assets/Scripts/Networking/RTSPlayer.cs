@@ -50,10 +50,10 @@ namespace Networking
 
         #region Client
 
-        public override void OnStartClient()
+        public override void OnStartAuthority()
         {
             base.OnStartClient();
-            if (!isClientOnly)
+            if (NetworkServer.active)
             {
                 return;
             }
@@ -64,7 +64,7 @@ namespace Networking
         public override void OnStopClient()
         {
             base.OnStopClient();
-            if (!isClientOnly)
+            if (!isClientOnly || !hasAuthority)
             {
                 return;
             }
@@ -74,19 +74,11 @@ namespace Networking
 
         private void AuthorityHandleUnitSpawned(Unit unit)
         {
-            if (!hasAuthority)
-            {
-                return;
-            }
             myUnits.Add(unit);
         }
 
         private void AuthorityHandleUnitDespawned(Unit unit)
         {
-            if (!hasAuthority)
-            {
-                return;
-            }
             myUnits.Remove(unit);
         }
 
