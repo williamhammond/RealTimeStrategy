@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2746118503253190604}
   - component: {fileID: 2746118503253190603}
+  - component: {fileID: 6369641451001704360}
   m_Layer: 0
   m_Name: HealthBar
   m_TagString: Untagged
@@ -60,6 +61,18 @@ Canvas:
   m_SortingLayerID: 0
   m_SortingOrder: 0
   m_TargetDisplay: 0
+--- !u!114 &6369641451001704360
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2746118503253190602}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fba8a0aa22e8ab0449b07e929ac36a84, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2746118503918054830
 GameObject:
   m_ObjectHideFlags: 0

@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 2330629992836116350}
   - component: {fileID: 2364872303181233016}
   - component: {fileID: 3203758628417052717}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Projectile
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -150,3 +150,4 @@ MonoBehaviour:
   rigidbody: {fileID: 2364872303181233016}
   destroyAfterSeconds: 5
   launchForce: 50
+  damage: 20
