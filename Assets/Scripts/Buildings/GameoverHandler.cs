@@ -9,6 +9,7 @@ public class GameoverHandler : NetworkBehaviour
     private readonly List<UnitBase> _bases = new List<UnitBase>();
 
     public static event Action<string> ClientOnGameOver;
+    public static event Action ServerOnGameOver;
 
     #region Server
     public override void OnStartServer()
@@ -37,6 +38,7 @@ public class GameoverHandler : NetworkBehaviour
         {
             int playerId = _bases[0].connectionToClient.connectionId;
             RpcGameOver($"Player {playerId}");
+            ServerOnGameOver?.Invoke();
         }
     }
 

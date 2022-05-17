@@ -1,5 +1,4 @@
 using System;
-using Cinemachine;
 using Combat;
 using Units;
 using UnityEngine;
@@ -18,6 +17,12 @@ public class UnitCommandHandler : MonoBehaviour
     private void Start()
     {
         _mainCamera = Camera.main;
+        GameoverHandler.ClientOnGameOver += ClientHandleGameOver;
+    }
+
+    private void OnDestroy()
+    {
+        throw new NotImplementedException();
     }
 
     private void Update()
@@ -57,5 +62,10 @@ public class UnitCommandHandler : MonoBehaviour
         {
             unit.GetUnitMovement().CmdMove(point);
         }
+    }
+
+    private void ClientHandleGameOver(string winner)
+    {
+        enabled = false;
     }
 }

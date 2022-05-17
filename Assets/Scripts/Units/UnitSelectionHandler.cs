@@ -24,11 +24,13 @@ namespace Units
         {
             _mainCamera = Camera.main;
             Unit.AuthorityOnUnitDespawned += AuthorityHandleUnitDespawned;
+            GameoverHandler.ClientOnGameOver += ClientHandleGameOver;
         }
 
         private void OnDestroy()
         {
             Unit.AuthorityOnUnitDespawned -= AuthorityHandleUnitDespawned;
+            GameoverHandler.ClientOnGameOver -= ClientHandleGameOver;
         }
 
         private void Update()
@@ -132,6 +134,11 @@ namespace Units
         private void AuthorityHandleUnitDespawned(Unit unit)
         {
             selectedUnits.Remove(unit);
+        }
+
+        private void ClientHandleGameOver(string winner)
+        {
+            enabled = false;
         }
     }
 }

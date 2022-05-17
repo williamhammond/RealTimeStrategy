@@ -13,6 +13,22 @@ namespace Combat
         }
 
         #region Server
+        public override void OnStartServer()
+        {
+            GameoverHandler.ServerOnGameOver += ServerHandleGameOver;
+        }
+
+        public override void OnStopServer()
+        {
+            GameoverHandler.ServerOnGameOver += ServerHandleGameOver;
+        }
+
+        [Server]
+        private void ServerHandleGameOver()
+        {
+            ClearTarget();
+        }
+
         [Command]
         public void CmdSetTarget(GameObject targetGameObject)
         {

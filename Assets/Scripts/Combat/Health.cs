@@ -17,10 +17,15 @@ namespace Combat
         public event Action<int, int> ClientOnHealthUpdated;
 
         #region Server
-
         public override void OnStartServer()
         {
             _currentHealth = maxHealth;
+            UnitBase.ServerOnPlayerDie += ServerHandlePlayerDie;
+        }
+
+        public override void OnStopServer()
+        {
+            UnitBase.ServerOnPlayerDie -= ServerHandlePlayerDie;
         }
 
         [Server]
@@ -37,6 +42,15 @@ namespace Combat
             {
                 ServerOnDie?.Invoke();
                 Debug.Log("We died");
+            }
+        }
+
+        [Server]
+        private void ServerHandlePlayerDie(int connectionId)
+        {
+            if (connectionToClient.connectionId == connectionId)
+            {
+                DealDamage(maxHealth);
             }
         }
 
