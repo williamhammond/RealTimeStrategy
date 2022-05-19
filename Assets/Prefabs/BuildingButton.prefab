@@ -66,7 +66,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 0}
+  m_Sprite: {fileID: -2413806693520163455, guid: 2034fce171083a145a950d1e3aa9d3a5,
+    type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -302,8 +303,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 03d1dbc2fa09a4b408adc7a2ee72bdd9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _building: {fileID: 4801143844968373069, guid: 154974aeac8737a45873a84a20276d35,
-    type: 3}
+  _building: {fileID: 0}
   iconImage: {fileID: 9051884323015108840}
   priceText: {fileID: 3659974132893589306}
   floorMask:

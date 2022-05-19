@@ -3,7 +3,11 @@
     "rootNamespace": "",
     "references": [
         "Mirror",
-        "Unity.Mirror.CodeGen"
+        "Unity.Mirror.CodeGen",
+        "UnityEditor.UI",
+        "UnityEngine.UI",
+        "UnityEditor.TestRunner",
+        "UnityEngine.TestRunner"
     ],
     "includePlatforms": [
         "Editor"

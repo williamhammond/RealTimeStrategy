@@ -3,7 +3,9 @@
     "references": [
         "Mirror",
         "Mirror.Components",
-        "Unity.TextMeshPro"
+        "Unity.TextMeshPro",
+        "UnityEditor.UI",
+        "UnityEngine.UI"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

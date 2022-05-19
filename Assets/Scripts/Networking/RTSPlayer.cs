@@ -11,8 +11,13 @@ namespace Networking
         [SerializeField]
         private Building[] buildings = Array.Empty<Building>();
 
+        public event Action<int> ClientOnResourcesUpdated;
+
         private List<Unit> myUnits = new List<Unit>();
         private List<Building> myBuildings = new List<Building>();
+
+        [SyncVar(hook = nameof(ClientHandleResourcesUpdated))]
+        private int resources = 500;
 
         public List<Unit> GetUnits()
         {
@@ -24,7 +29,18 @@ namespace Networking
             return myBuildings;
         }
 
+        public int GetResources()
+        {
+            return resources;
+        }
+
         #region Server
+
+        [Server]
+        public void SetResources(int newResources)
+        {
+            this.resources = newResources;
+        }
 
         public override void OnStartServer()
         {
@@ -56,10 +72,12 @@ namespace Networking
                     break;
                 }
             }
+
             if (!buildingToPlace)
             {
                 return;
             }
+
             GameObject buildingInstance = Instantiate(
                 buildingToPlace.gameObject,
                 position,
@@ -75,6 +93,7 @@ namespace Networking
             {
                 return;
             }
+
             myUnits.Add(unit);
         }
 
@@ -84,6 +103,7 @@ namespace Networking
             {
                 return;
             }
+
             myUnits.Remove(unit);
         }
 
@@ -93,6 +113,7 @@ namespace Networking
             {
                 return;
             }
+
             myBuildings.Add(building);
         }
 
@@ -102,6 +123,7 @@ namespace Networking
             {
                 return;
             }
+
             myBuildings.Remove(building);
         }
 
@@ -116,6 +138,7 @@ namespace Networking
             {
                 return;
             }
+
             Unit.AuthorityOnUnitSpawned += AuthorityHandleUnitSpawned;
             Unit.AuthorityOnUnitDespawned += AuthorityHandleUnitDespawned;
 
@@ -130,6 +153,7 @@ namespace Networking
             {
                 return;
             }
+
             Unit.AuthorityOnUnitSpawned -= AuthorityHandleUnitSpawned;
             Unit.AuthorityOnUnitDespawned -= AuthorityHandleUnitDespawned;
         }
@@ -152,6 +176,11 @@ namespace Networking
         private void AuthorityHandleBuildingDespawned(Building building)
         {
             myBuildings.Remove(building);
+        }
+
+        private void ClientHandleResourcesUpdated(int oldResources, int newResources)
+        {
+            ClientOnResourcesUpdated?.Invoke(newResources);
         }
 
         #endregion

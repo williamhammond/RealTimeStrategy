@@ -1,7 +1,9 @@
 {
     "name": "Mirror.Components",
     "references": [
-        "Mirror"
+        "Mirror",
+        "UnityEditor.UI",
+        "UnityEngine.UI"
     ],
     "optionalUnityReferences": [],
     "includePlatforms": [],
