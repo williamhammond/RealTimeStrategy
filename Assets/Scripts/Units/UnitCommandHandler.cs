@@ -20,11 +20,6 @@ public class UnitCommandHandler : MonoBehaviour
         GameoverHandler.ClientOnGameOver += ClientHandleGameOver;
     }
 
-    private void OnDestroy()
-    {
-        throw new NotImplementedException();
-    }
-
     private void Update()
     {
         if (!Mouse.current.rightButton.wasPressedThisFrame)

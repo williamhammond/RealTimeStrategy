@@ -23,11 +23,19 @@ namespace Units
         [SerializeField]
         private Health health;
 
+        [SerializeField]
+        private int resourceCost = 10;
+
         public static event Action<Unit> ServerOnUnitSpawned;
         public static event Action<Unit> ServerOnUnitDespawned;
 
         public static event Action<Unit> AuthorityOnUnitSpawned;
         public static event Action<Unit> AuthorityOnUnitDespawned;
+
+        public int GetCost()
+        {
+            return resourceCost;
+        }
 
         public Targeter GetTargeter()
         {

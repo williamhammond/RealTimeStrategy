@@ -1,68 +1,165 @@
 using Combat;
 using Mirror;
+using Networking;
+using TMPro;
+using Units;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
-public class UnitSpawner : NetworkBehaviour, IPointerClickHandler
+namespace Buildings
 {
-    [SerializeField]
-    private GameObject unitPrefab = null;
-
-    [SerializeField]
-    private Transform unitSpawnPoint = null;
-
-    [SerializeField]
-    private Health health = null;
-
-    #region Server
-
-    public override void OnStartServer()
+    public class UnitSpawner : NetworkBehaviour, IPointerClickHandler
     {
-        health.ServerOnDie += ServerHandleDie;
-    }
+        [SerializeField]
+        private Unit unitPrefab = null;
 
-    public override void OnStopServer()
-    {
-        health.ServerOnDie -= ServerHandleDie;
-    }
+        [SerializeField]
+        private Transform unitSpawnPoint = null;
 
-    [Command]
-    private void CmdSpawnUnit()
-    {
-        GameObject unitInstance = Instantiate(
-            unitPrefab,
-            unitSpawnPoint.position,
-            unitSpawnPoint.rotation
-        );
+        [SerializeField]
+        private Health health = null;
 
-        NetworkServer.Spawn(unitInstance, connectionToClient);
-    }
+        [SerializeField]
+        private TMP_Text remainingUnitsText = null;
 
-    [Server]
-    private void ServerHandleDie()
-    {
-        NetworkServer.Destroy(gameObject);
-    }
+        [SerializeField]
+        private Image unitProgressImage = null;
 
-    #endregion
+        [SerializeField]
+        private int maxUnitQueue = 5;
 
-    #region Client
+        [SerializeField]
+        private float spawnMoveRange = 10f;
 
+        [SerializeField]
+        private float unitSpawnDuration = 5f;
 
+        [SyncVar(hook = nameof(ClientHandleQueuedUnitsUpdated))]
+        private int queuedUnits;
 
-    #endregion
+        [SyncVar]
+        private float unitTimer;
 
-    public void OnPointerClick(PointerEventData eventData)
-    {
-        if (eventData.button != PointerEventData.InputButton.Left)
+        private RTSPlayer _player;
+        private float progressImageVelocity;
+
+        private void Update()
         {
-            return;
+            if (_player == null)
+            {
+                _player = NetworkClient.connection.identity.GetComponent<RTSPlayer>();
+            }
+            if (isServer)
+            {
+                ProduceUnits();
+            }
+            if (isClient)
+            {
+                UpdateTimerDisplay();
+            }
         }
 
-        if (!hasAuthority)
+        #region Server
+
+        public override void OnStartServer()
         {
-            return;
+            health.ServerOnDie += ServerHandleDie;
         }
-        CmdSpawnUnit();
+
+        public override void OnStopServer()
+        {
+            health.ServerOnDie -= ServerHandleDie;
+        }
+
+        [Server]
+        private void ProduceUnits()
+        {
+            if (queuedUnits == 0)
+                return;
+
+            unitTimer += Time.deltaTime;
+            if (unitTimer > unitSpawnDuration)
+            {
+                Unit unitInstance = Instantiate(
+                    unitPrefab,
+                    unitSpawnPoint.position,
+                    unitSpawnPoint.rotation
+                );
+                NetworkServer.Spawn(unitInstance.gameObject, connectionToClient);
+
+                Vector3 spawnOffset = Random.insideUnitCircle * spawnMoveRange;
+                spawnOffset.y = unitSpawnPoint.position.y;
+                UnitMovement unitMovement = unitInstance.GetUnitMovement();
+                unitMovement.ServerMove(unitSpawnPoint.position + spawnOffset);
+
+                queuedUnits--;
+                unitTimer = 0f;
+            }
+        }
+
+        [Command]
+        private void CmdSpawnUnit()
+        {
+            if (queuedUnits == maxUnitQueue)
+            {
+                return;
+            }
+
+            int resources = connectionToClient.identity.GetComponent<RTSPlayer>().GetResources();
+            if (resources >= unitPrefab.GetCost())
+            {
+                queuedUnits++;
+                _player.SetResources(_player.GetResources() - unitPrefab.GetCost());
+            }
+        }
+
+        [Server]
+        private void ServerHandleDie()
+        {
+            NetworkServer.Destroy(gameObject);
+        }
+
+        #endregion
+
+        #region Client
+        private void ClientHandleQueuedUnitsUpdated(int oldQueuedUnits, int newQueuedUnits)
+        {
+            remainingUnitsText.text = $"{newQueuedUnits}";
+        }
+
+        private void UpdateTimerDisplay()
+        {
+            float newProgress = unitTimer / unitSpawnDuration;
+            if (newProgress < unitProgressImage.fillAmount)
+            {
+                unitProgressImage.fillAmount = newProgress;
+            }
+            else
+            {
+                unitProgressImage.fillAmount = Mathf.SmoothDamp(
+                    unitProgressImage.fillAmount,
+                    newProgress,
+                    ref progressImageVelocity,
+                    0.1f
+                );
+            }
+        }
+
+        #endregion
+
+        public void OnPointerClick(PointerEventData eventData)
+        {
+            if (eventData.button != PointerEventData.InputButton.Left)
+            {
+                return;
+            }
+
+            if (!hasAuthority)
+            {
+                return;
+            }
+            CmdSpawnUnit();
+        }
     }
 }
