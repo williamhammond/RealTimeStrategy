@@ -1,8 +1,6 @@
 using System;
 using System.Collections.Generic;
 using Mirror;
-using Networking;
-using UnityEngine;
 
 public class GameoverHandler : NetworkBehaviour
 {

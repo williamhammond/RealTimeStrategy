@@ -10,7 +10,7 @@ namespace Combat
         private int maxHealth = 0;
 
         [SyncVar(hook = nameof(HandleHealthUpdated))]
-        private int _currentHealth;
+        private int currentHealth;
 
         public event Action ServerOnDie;
 
@@ -19,7 +19,7 @@ namespace Combat
         #region Server
         public override void OnStartServer()
         {
-            _currentHealth = maxHealth;
+            currentHealth = maxHealth;
             UnitBase.ServerOnPlayerDie += ServerHandlePlayerDie;
         }
 
@@ -31,14 +31,14 @@ namespace Combat
         [Server]
         public void DealDamage(int amount)
         {
-            if (_currentHealth == 0)
+            if (currentHealth == 0)
             {
                 return;
             }
 
-            _currentHealth = Mathf.Max(_currentHealth - amount, 0);
+            currentHealth = Mathf.Max(currentHealth - amount, 0);
 
-            if (_currentHealth == 0)
+            if (currentHealth == 0)
             {
                 ServerOnDie?.Invoke();
                 Debug.Log("We died");

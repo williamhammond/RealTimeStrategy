@@ -1,4 +1,5 @@
 using Mirror;
+using Mirror.Examples.Chat;
 using Networking;
 using TMPro;
 using UnityEngine;
@@ -21,9 +22,12 @@ public class BuildingButton : MonoBehaviour, IPointerDownHandler, IPointerUpHand
     private LayerMask floorMask = new LayerMask();
 
     private Camera mainCamera;
-    private RTSPlayer _player;
+    private RTSPlayer player;
     private GameObject buildingPreviewInstance;
     private Renderer buildingRendererInstance;
+    private BoxCollider buildingCollider;
+
+    private static readonly int BaseColor = Shader.PropertyToID("_BaseColor");
 
     private void Start()
     {
@@ -31,13 +35,15 @@ public class BuildingButton : MonoBehaviour, IPointerDownHandler, IPointerUpHand
 
         iconImage.sprite = _building.GetIcon();
         priceText.text = _building.GetPrice().ToString();
+
+        buildingCollider = _building.GetComponent<BoxCollider>();
     }
 
     private void Update()
     {
-        if (_player == null)
+        if (player == null)
         {
-            _player = NetworkClient.connection.identity.GetComponent<RTSPlayer>();
+            player = NetworkClient.connection.identity.GetComponent<RTSPlayer>();
         }
 
         if (buildingPreviewInstance)
@@ -49,6 +55,11 @@ public class BuildingButton : MonoBehaviour, IPointerDownHandler, IPointerUpHand
     public void OnPointerDown(PointerEventData eventData)
     {
         if (eventData.button != PointerEventData.InputButton.Left)
+        {
+            return;
+        }
+
+        if (player.GetResources() < _building.GetPrice())
         {
             return;
         }
@@ -70,7 +81,7 @@ public class BuildingButton : MonoBehaviour, IPointerDownHandler, IPointerUpHand
 
         if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, floorMask))
         {
-            _player.CmdTryPlaceBuilding(_building.GetId(), hit.point);
+            player.CmdTryPlaceBuilding(_building.GetId(), hit.point);
         }
 
         Destroy(buildingPreviewInstance);
@@ -80,14 +91,21 @@ public class BuildingButton : MonoBehaviour, IPointerDownHandler, IPointerUpHand
     {
         Ray ray = mainCamera.ScreenPointToRay(Mouse.current.position.ReadValue());
 
-        if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, floorMask))
+        if (!Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, floorMask))
         {
-            buildingPreviewInstance.transform.position = hit.point;
-
-            if (!buildingPreviewInstance.activeSelf)
-            {
-                buildingPreviewInstance.SetActive(true);
-            }
+            return;
         }
+
+        buildingPreviewInstance.transform.position = hit.point;
+
+        if (!buildingPreviewInstance.activeSelf)
+        {
+            buildingPreviewInstance.SetActive(true);
+        }
+
+        Color color = player.CanPlaceBuilding(buildingCollider, hit.point)
+          ? Color.green
+          : Color.red;
+        buildingRendererInstance.material.SetColor(BaseColor, color);
     }
 }

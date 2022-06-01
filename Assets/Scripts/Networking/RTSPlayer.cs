@@ -11,13 +11,19 @@ namespace Networking
         [SerializeField]
         private Building[] buildings = Array.Empty<Building>();
 
+        [SyncVar(hook = nameof(ClientHandleResourcesUpdated))]
+        private int resources = 500;
+
+        [SerializeField]
+        private LayerMask buildBlockLayer = new LayerMask();
+
+        [SerializeField]
+        private float buildingRangeLimit = 5f;
+
         public event Action<int> ClientOnResourcesUpdated;
 
         private List<Unit> myUnits = new List<Unit>();
         private List<Building> myBuildings = new List<Building>();
-
-        [SyncVar(hook = nameof(ClientHandleResourcesUpdated))]
-        private int resources = 500;
 
         public List<Unit> GetUnits()
         {
@@ -32,6 +38,31 @@ namespace Networking
         public int GetResources()
         {
             return resources;
+        }
+
+        public bool CanPlaceBuilding(BoxCollider buildingCollider, Vector3 position)
+        {
+            bool isOverlapping = Physics.CheckBox(
+                position + buildingCollider.center,
+                buildingCollider.size / 2,
+                Quaternion.identity,
+                buildBlockLayer
+            );
+
+            bool inRange = false;
+            foreach (Building building in myBuildings)
+            {
+                if (
+                    (position - building.transform.position).sqrMagnitude
+                    <= buildingRangeLimit * buildingRangeLimit
+                )
+                {
+                    inRange = true;
+                    break;
+                }
+            }
+
+            return !isOverlapping && inRange;
         }
 
         #region Server
@@ -78,6 +109,17 @@ namespace Networking
                 return;
             }
 
+            if (resources < buildingToPlace.GetPrice())
+            {
+                return;
+            }
+
+            BoxCollider buildingCollider = buildingToPlace.GetComponent<BoxCollider>();
+            if (!CanPlaceBuilding(buildingCollider, position))
+            {
+                return;
+            }
+
             GameObject buildingInstance = Instantiate(
                 buildingToPlace.gameObject,
                 position,
@@ -85,6 +127,7 @@ namespace Networking
             );
 
             NetworkServer.Spawn(buildingInstance, connectionToClient);
+            SetResources(resources - buildingToPlace.GetPrice());
         }
 
         private void ServerHandleUnitSpawned(Unit unit)
