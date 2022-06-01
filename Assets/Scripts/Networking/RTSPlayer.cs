@@ -22,6 +22,7 @@ namespace Networking
 
         public event Action<int> ClientOnResourcesUpdated;
 
+        private Color teamColor = new Color();
         private List<Unit> myUnits = new List<Unit>();
         private List<Building> myBuildings = new List<Building>();
 
@@ -33,6 +34,11 @@ namespace Networking
         public List<Building> GetBuildings()
         {
             return myBuildings;
+        }
+
+        public Color GetTeamcolor()
+        {
+            return teamColor;
         }
 
         public int GetResources()
@@ -67,11 +73,6 @@ namespace Networking
 
         #region Server
 
-        [Server]
-        public void SetResources(int newResources)
-        {
-            this.resources = newResources;
-        }
 
         public override void OnStartServer()
         {
@@ -89,6 +90,18 @@ namespace Networking
 
             Building.ServerOnBuildingSpawned -= ServerHandleBuildingSpawned;
             Building.ServerOnBuildingDespawned -= ServerHandleBuildingDespawned;
+        }
+
+        [Server]
+        public void SetResources(int newResources)
+        {
+            this.resources = newResources;
+        }
+
+        [Server]
+        public void SetTeamColor(Color newTeamColor)
+        {
+            teamColor = newTeamColor;
         }
 
         [Command]

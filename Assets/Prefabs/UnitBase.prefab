@@ -171,6 +171,16 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3154371989940701082, guid: 66be7f41dad731f49b2f3454baaaa255,
+        type: 3}
+      propertyPath: colorRenderers.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3154371989940701082, guid: 66be7f41dad731f49b2f3454baaaa255,
+        type: 3}
+      propertyPath: colorRenderers.Array.data[0]
+      value: 
+      objectReference: {fileID: 7750791981064629143}
     - target: {fileID: 4562896834781177318, guid: 66be7f41dad731f49b2f3454baaaa255,
         type: 3}
       propertyPath: m_Center.y

@@ -81,6 +81,12 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 3714993114580888057}
   m_PrefabAsset: {fileID: 0}
+--- !u!23 &7750791981064629143 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 6349537486163673710, guid: 0b2acfdd0b6ba2b4a94a072b2d876951,
+    type: 3}
+  m_PrefabInstance: {fileID: 3714993114580888057}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &5178310689624626291
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -174,6 +180,16 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3154371989940701082, guid: 66be7f41dad731f49b2f3454baaaa255,
+        type: 3}
+      propertyPath: colorRenderers.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3154371989940701082, guid: 66be7f41dad731f49b2f3454baaaa255,
+        type: 3}
+      propertyPath: colorRenderers.Array.data[0]
+      value: 
+      objectReference: {fileID: 7750791981064629143}
     - target: {fileID: 4562896834781177318, guid: 66be7f41dad731f49b2f3454baaaa255,
         type: 3}
       propertyPath: m_Center.y
