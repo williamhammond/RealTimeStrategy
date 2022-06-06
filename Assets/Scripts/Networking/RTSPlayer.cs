@@ -9,6 +9,9 @@ namespace Networking
     public class RTSPlayer : NetworkBehaviour
     {
         [SerializeField]
+        private Transform cameraTransform = null;
+
+        [SerializeField]
         private Building[] buildings = Array.Empty<Building>();
 
         [SyncVar(hook = nameof(ClientHandleResourcesUpdated))]
@@ -25,6 +28,11 @@ namespace Networking
         private Color teamColor = new Color();
         private List<Unit> myUnits = new List<Unit>();
         private List<Building> myBuildings = new List<Building>();
+
+        public Transform GetCameraTransform()
+        {
+            return cameraTransform;
+        }
 
         public List<Unit> GetUnits()
         {
