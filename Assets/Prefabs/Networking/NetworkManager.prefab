@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 5672137450408894438}
   - component: {fileID: 5672137450408894436}
   - component: {fileID: 5672137450408894459}
-  - component: {fileID: 5672137450408894439}
   m_Layer: 0
   m_Name: NetworkManager
   m_TagString: Untagged
@@ -51,7 +50,7 @@ MonoBehaviour:
   autoStartServerBuild: 1
   serverTickRate: 30
   offlineScene: Assets/Scenes/Scene_Menu.unity
-  onlineScene: Assets/Scenes/Scene_Map_Test.unity
+  onlineScene: 
   transport: {fileID: 5672137450408894459}
   networkAddress: localhost
   maxConnections: 100
@@ -61,13 +60,13 @@ MonoBehaviour:
   autoCreatePlayer: 1
   playerSpawnMethod: 1
   spawnPrefabs:
-  - {fileID: 3983402270335598966, guid: edd7162420faa754fb576bf2280a2ca9, type: 3}
   - {fileID: 4132068578038508588, guid: dd76a378debaa624db744863ff7a0324, type: 3}
   - {fileID: 6468837220686577029, guid: 4458dd54449b7e9458689e464bb22273, type: 3}
   - {fileID: 4267350192373511123, guid: bc0b22d219e80f743bf4b0693d854761, type: 3}
-  - {fileID: 4132068578038508588, guid: 154974aeac8737a45873a84a20276d35, type: 3}
   - {fileID: 4132068578038508588, guid: 91abc8deef9e5f7419b5625a715704d6, type: 3}
-  unitSpawnerPrefab: {fileID: 4132068578038508588, guid: dd76a378debaa624db744863ff7a0324,
+  - {fileID: 9166845415512775809, guid: 7b7745dd84ae30041b8467609e581e07, type: 3}
+  - {fileID: 6124209870269968078, guid: f1ff5ed58ab70be46a5b597f827379cc, type: 3}
+  unitBasePrefab: {fileID: 4132068578038508588, guid: dd76a378debaa624db744863ff7a0324,
     type: 3}
   gameOverHandlerPrefab: {fileID: 3615330777076063194, guid: bc0b22d219e80f743bf4b0693d854761,
     type: 3}
@@ -95,17 +94,3 @@ MonoBehaviour:
   clientMaxReceivesPerTick: 1000
   clientSendQueueLimit: 10000
   clientReceiveQueueLimit: 10000
---- !u!114 &5672137450408894439
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5672137450408894458}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6442dc8070ceb41f094e44de0bf87274, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  offsetX: 0
-  offsetY: 0

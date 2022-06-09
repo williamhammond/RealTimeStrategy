@@ -1,4 +1,3 @@
-using Mirror;
 using Networking;
 using TMPro;
 using UnityEngine;
@@ -16,7 +15,6 @@ namespace Resources
         {
             if (player == null)
             {
-                player = NetworkClient.connection.identity.GetComponent<RTSPlayer>();
                 if (player != null)
                 {
                     ClientHandleResourcesUpdated(player.GetResources());
