@@ -68,7 +68,7 @@ MonoBehaviour:
   syncInterval: 0.1
   cameraTransform: {fileID: 4707474831648775132}
   buildings:
-  - {fileID: 4801143844968373069, guid: 154974aeac8737a45873a84a20276d35, type: 3}
+  - {fileID: 346273385768283104, guid: 7b7745dd84ae30041b8467609e581e07, type: 3}
   - {fileID: 4801143844968373069, guid: 91abc8deef9e5f7419b5625a715704d6, type: 3}
   buildBlockLayer:
     serializedVersion: 2

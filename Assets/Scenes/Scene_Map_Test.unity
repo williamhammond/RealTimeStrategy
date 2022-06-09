@@ -748,6 +748,17 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2837169388372677379, guid: 9588830c057587346878ebda0a381bed,
+        type: 3}
+      propertyPath: _building
+      value: 
+      objectReference: {fileID: 346273385768283104, guid: 7b7745dd84ae30041b8467609e581e07,
+        type: 3}
+    - target: {fileID: 4011071101446739329, guid: 9588830c057587346878ebda0a381bed,
+        type: 3}
+      propertyPath: m_Name
+      value: SmallUnitSpawnerButton
+      objectReference: {fileID: 0}
     - target: {fileID: 8591974917272070416, guid: 9588830c057587346878ebda0a381bed,
         type: 3}
       propertyPath: m_RootOrder
