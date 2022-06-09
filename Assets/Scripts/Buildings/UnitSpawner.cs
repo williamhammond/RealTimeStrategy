@@ -1,3 +1,4 @@
+using System;
 using Combat;
 using Mirror;
 using Networking;
@@ -6,6 +7,7 @@ using Units;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using Random = UnityEngine.Random;
 
 namespace Buildings
 {
