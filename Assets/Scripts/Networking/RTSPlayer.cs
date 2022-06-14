@@ -88,10 +88,7 @@ namespace Networking
             return !isOverlapping && inRange;
         }
 
-        public void Start() { }
-
         #region Server
-
         [Server]
         public void SetPartyOwner(bool state)
         {
@@ -105,6 +102,8 @@ namespace Networking
 
             Building.ServerOnBuildingSpawned += ServerHandleBuildingSpawned;
             Building.ServerOnBuildingDespawned += ServerHandleBuildingDespawned;
+
+            DontDestroyOnLoad(gameObject);
         }
 
         public override void OnStopServer()
@@ -224,11 +223,11 @@ namespace Networking
 
         public override void OnStartAuthority()
         {
-            base.OnStartClient();
             if (NetworkServer.active)
             {
                 return;
             }
+
             Unit.AuthorityOnUnitSpawned += AuthorityHandleUnitSpawned;
             Unit.AuthorityOnUnitDespawned += AuthorityHandleUnitDespawned;
 
@@ -243,6 +242,7 @@ namespace Networking
                 return;
             }
 
+            DontDestroyOnLoad(gameObject);
             ((RTSNetworkManager)NetworkManager.singleton).Players.Add(this);
         }
 
