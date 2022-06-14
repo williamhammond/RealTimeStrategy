@@ -8,6 +8,9 @@ namespace Networking
 {
     public class RTSPlayer : NetworkBehaviour
     {
+        [SyncVar(hook = nameof(ClientHandleDisplayNameUpdated))]
+        private string displayName;
+
         [SerializeField]
         private Transform cameraTransform;
 
@@ -24,6 +27,8 @@ namespace Networking
         private float buildingRangeLimit = 5f;
 
         public event Action<int> ClientOnResourcesUpdated;
+
+        public static event Action ClientOnInfoUpdated;
         public static event Action<bool> AuthorityOnPartyOwnerStateUpdated;
 
         [SyncVar(hook = nameof(AuthorityHandlePartyOwnerStateUpdated))]
@@ -32,6 +37,11 @@ namespace Networking
         private Color teamColor = new Color();
         private readonly List<Unit> myUnits = new List<Unit>();
         private readonly List<Building> myBuildings = new List<Building>();
+
+        public string GetDisplayName()
+        {
+            return displayName;
+        }
 
         public bool GetIsPartyOwner()
         {
@@ -89,6 +99,13 @@ namespace Networking
         }
 
         #region Server
+
+        [Server]
+        public void SetDisplayName(string displayName)
+        {
+            this.displayName = displayName;
+        }
+
         [Server]
         public void SetPartyOwner(bool state)
         {
@@ -134,6 +151,7 @@ namespace Networking
             {
                 return;
             }
+
             ((RTSNetworkManager)NetworkManager.singleton).StartGame();
         }
 
@@ -220,6 +238,10 @@ namespace Networking
 
         #region Client
 
+        private void ClientHandleDisplayNameUpdated(string oldName, string newName)
+        {
+            ClientOnInfoUpdated?.Invoke();
+        }
 
         public override void OnStartAuthority()
         {
@@ -250,16 +272,19 @@ namespace Networking
         {
             base.OnStopClient();
 
+            ClientOnInfoUpdated?.Invoke();
             if (!isClientOnly)
             {
                 return;
             }
+
             ((RTSNetworkManager)NetworkManager.singleton).Players.Remove(this);
 
             if (!hasAuthority)
             {
                 return;
             }
+
             Unit.AuthorityOnUnitSpawned -= AuthorityHandleUnitSpawned;
             Unit.AuthorityOnUnitDespawned -= AuthorityHandleUnitDespawned;
         }

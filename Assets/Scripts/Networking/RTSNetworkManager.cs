@@ -50,10 +50,10 @@ namespace Networking
 
         public void StartGame()
         {
-            // if (Players.Count < 2)
-            // {
-            //     return;
-            // }
+            if (Players.Count < 2)
+            {
+                return;
+            }
 
             _isGameInProgress = true;
 
@@ -66,6 +66,7 @@ namespace Networking
 
             RTSPlayer player = conn.identity.GetComponent<RTSPlayer>();
             Players.Add(player);
+            player.SetDisplayName($"Player {Players.Count}");
             player.SetTeamColor(
                 (
                     new Color(
