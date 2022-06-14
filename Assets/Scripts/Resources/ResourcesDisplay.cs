@@ -1,3 +1,5 @@
+using System;
+using Mirror;
 using Networking;
 using TMPro;
 using UnityEngine;
@@ -11,16 +13,12 @@ namespace Resources
 
         private RTSPlayer player;
 
-        private void Update()
+        private void Start()
         {
-            if (player == null)
-            {
-                if (player != null)
-                {
-                    ClientHandleResourcesUpdated(player.GetResources());
-                    player.ClientOnResourcesUpdated += ClientHandleResourcesUpdated;
-                }
-            }
+            player = NetworkClient.connection.identity.GetComponent<RTSPlayer>();
+
+            ClientHandleResourcesUpdated(player.GetResources());
+            player.ClientOnResourcesUpdated += ClientHandleResourcesUpdated;
         }
 
         private void OnDestroy()

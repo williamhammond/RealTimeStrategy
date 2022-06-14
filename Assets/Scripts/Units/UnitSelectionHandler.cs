@@ -23,8 +23,11 @@ namespace Units
         private void Start()
         {
             _mainCamera = Camera.main;
+
             Unit.AuthorityOnUnitDespawned += AuthorityHandleUnitDespawned;
             GameoverHandler.ClientOnGameOver += ClientHandleGameOver;
+
+            _player = NetworkClient.connection.identity.GetComponent<RTSPlayer>();
         }
 
         private void OnDestroy()
@@ -35,12 +38,6 @@ namespace Units
 
         private void Update()
         {
-            //TODO move this logic to lobby
-            if (!_player)
-            {
-                _player = NetworkClient.connection.identity.GetComponent<RTSPlayer>();
-            }
-
             if (Mouse.current.leftButton.wasPressedThisFrame)
             {
                 StartSelectionArea();
@@ -63,8 +60,10 @@ namespace Units
                 {
                     selected.Deselect();
                 }
+
                 selectedUnits.Clear();
             }
+
             unitSelectionArea.gameObject.SetActive(true);
             _startPosition = Mouse.current.position.ReadValue();
             UpdateSelectionArea();
@@ -92,6 +91,7 @@ namespace Units
                 {
                     return;
                 }
+
                 if (!hit.collider.TryGetComponent<Unit>(out Unit unit))
                 {
                     return;
@@ -101,11 +101,13 @@ namespace Units
                 {
                     return;
                 }
+
                 selectedUnits.Add(unit);
                 foreach (Unit selected in selectedUnits)
                 {
                     selected.Select();
                 }
+
                 return;
             }
 
@@ -117,6 +119,7 @@ namespace Units
                 {
                     continue;
                 }
+
                 Vector3 screenPosition = _mainCamera.WorldToScreenPoint(unit.transform.position);
                 if (
                     screenPosition.x > min.x
