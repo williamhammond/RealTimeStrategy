@@ -2904,6 +2904,30 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 898444523}
   m_CullTransparentMesh: 1
+--- !u!1 &933997983 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5672137450408894458, guid: ee310a01c5a54fe42a9fdb75a3470319,
+    type: 3}
+  m_PrefabInstance: {fileID: 1620308183}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &933997987
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 933997983}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ea368fb6f27ec2f40a40e20977992b9c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Channels: 0200000001000000
+  Timeout: 25
+  SteamAppID: 480
+  AllowSteamRelay: 1
+  UseNextGenSteamNetworking: 1
+  SteamUserID: 0
 --- !u!1 &1002963860
 GameObject:
   m_ObjectHideFlags: 0
@@ -3553,6 +3577,16 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 3948623074772902701, guid: ee310a01c5a54fe42a9fdb75a3470319,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5672137450408894436, guid: ee310a01c5a54fe42a9fdb75a3470319,
+        type: 3}
+      propertyPath: transport
+      value: 
+      objectReference: {fileID: 933997987}
     - target: {fileID: 5672137450408894438, guid: ee310a01c5a54fe42a9fdb75a3470319,
         type: 3}
       propertyPath: m_RootOrder
@@ -3930,6 +3964,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   landingPagePanel: {fileID: 1013390005}
+  useSteam: 1
 --- !u!1 &1938680663
 GameObject:
   m_ObjectHideFlags: 0

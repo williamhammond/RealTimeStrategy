@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5672137450408894438}
   - component: {fileID: 5672137450408894436}
-  - component: {fileID: 5672137450408894459}
+  - component: {fileID: 3948623074772902701}
   m_Layer: 0
   m_Name: NetworkManager
   m_TagString: Untagged
@@ -51,7 +51,7 @@ MonoBehaviour:
   serverTickRate: 30
   offlineScene: Assets/Scenes/Scene_Menu.unity
   onlineScene: 
-  transport: {fileID: 5672137450408894459}
+  transport: {fileID: 0}
   networkAddress: localhost
   maxConnections: 100
   authenticator: {fileID: 0}
@@ -70,7 +70,7 @@ MonoBehaviour:
     type: 3}
   gameOverHandlerPrefab: {fileID: 3615330777076063194, guid: bc0b22d219e80f743bf4b0693d854761,
     type: 3}
---- !u!114 &5672137450408894459
+--- !u!114 &3948623074772902701
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -79,18 +79,23 @@ MonoBehaviour:
   m_GameObject: {fileID: 5672137450408894458}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c7424c1070fad4ba2a7a96b02fbeb4bb, type: 3}
+  m_Script: {fileID: 11500000, guid: 6b0fecffa3f624585964b0d0eb21b18e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  port: 7777
+  Port: 7777
+  DualMode: 1
   NoDelay: 1
-  SendTimeout: 5000
-  ReceiveTimeout: 30000
-  serverMaxMessageSize: 16384
-  serverMaxReceivesPerTick: 10000
-  serverSendQueueLimitPerConnection: 10000
-  serverReceiveQueueLimitPerConnection: 10000
-  clientMaxMessageSize: 16384
-  clientMaxReceivesPerTick: 1000
-  clientSendQueueLimit: 10000
-  clientReceiveQueueLimit: 10000
+  Interval: 10
+  Timeout: 10000
+  FastResend: 2
+  CongestionWindow: 0
+  SendWindowSize: 4096
+  ReceiveWindowSize: 4096
+  MaxRetransmit: 40
+  NonAlloc: 1
+  MaximizeSendReceiveBuffersToOSLimit: 1
+  ReliableMaxMessageSize: 298449
+  UnreliableMaxMessageSize: 1199
+  debugLog: 0
+  statisticsGUI: 0
+  statisticsLog: 0
