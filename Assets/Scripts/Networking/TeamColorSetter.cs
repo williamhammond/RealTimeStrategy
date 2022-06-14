@@ -19,7 +19,7 @@ public class TeamColorSetter : NetworkBehaviour
     {
         RTSPlayer player = connectionToClient.identity.GetComponent<RTSPlayer>();
 
-        teamColor = player.GetTeamcolor();
+        teamColor = player.GetTeamColor();
     }
 
     #endregion

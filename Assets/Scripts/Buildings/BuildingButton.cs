@@ -1,3 +1,4 @@
+using System;
 using Mirror;
 using Mirror.Examples.Chat;
 using Networking;
@@ -5,6 +6,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class BuildingButton : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
@@ -36,16 +38,13 @@ public class BuildingButton : MonoBehaviour, IPointerDownHandler, IPointerUpHand
         iconImage.sprite = _building.GetIcon();
         priceText.text = _building.GetPrice().ToString();
 
+        player = NetworkClient.connection.identity.GetComponent<RTSPlayer>();
+
         buildingCollider = _building.GetComponent<BoxCollider>();
     }
 
     private void Update()
     {
-        if (player == null)
-        {
-            player = NetworkClient.connection.identity.GetComponent<RTSPlayer>();
-        }
-
         if (buildingPreviewInstance)
         {
             UpdateBuildingPreview();

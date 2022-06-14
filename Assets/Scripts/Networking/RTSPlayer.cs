@@ -9,7 +9,7 @@ namespace Networking
     public class RTSPlayer : NetworkBehaviour
     {
         [SerializeField]
-        private Transform cameraTransform = null;
+        private Transform cameraTransform;
 
         [SerializeField]
         private Building[] buildings = Array.Empty<Building>();
@@ -30,8 +30,8 @@ namespace Networking
         private bool isPartyOwner = false;
 
         private Color teamColor = new Color();
-        private List<Unit> myUnits = new List<Unit>();
-        private List<Building> myBuildings = new List<Building>();
+        private readonly List<Unit> myUnits = new List<Unit>();
+        private readonly List<Building> myBuildings = new List<Building>();
 
         public bool GetIsPartyOwner()
         {
@@ -53,7 +53,7 @@ namespace Networking
             return myBuildings;
         }
 
-        public Color GetTeamcolor()
+        public Color GetTeamColor()
         {
             return teamColor;
         }
@@ -87,6 +87,8 @@ namespace Networking
 
             return !isOverlapping && inRange;
         }
+
+        public void Start() { }
 
         #region Server
 
@@ -227,7 +229,6 @@ namespace Networking
             {
                 return;
             }
-
             Unit.AuthorityOnUnitSpawned += AuthorityHandleUnitSpawned;
             Unit.AuthorityOnUnitDespawned += AuthorityHandleUnitDespawned;
 
