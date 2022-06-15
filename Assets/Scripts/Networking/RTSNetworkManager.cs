@@ -18,7 +18,7 @@ namespace Networking
         public static event Action ClientOnConnected;
         public static event Action ClientOnDisconnected;
 
-        public List<RTSPlayer> Players { get; } = new List<RTSPlayer>();
+        public Dictionary<string, RTSPlayer> Players { get; }
 
         private bool _isGameInProgress = false;
 
@@ -37,7 +37,7 @@ namespace Networking
         public override void OnServerDisconnect(NetworkConnectionToClient conn)
         {
             RTSPlayer player = conn.identity.GetComponent<RTSPlayer>();
-            Players.Remove(player);
+            Players.Remove(player.GetUUID());
 
             base.OnServerDisconnect(conn);
         }
@@ -65,7 +65,7 @@ namespace Networking
             base.OnServerAddPlayer(conn);
 
             RTSPlayer player = conn.identity.GetComponent<RTSPlayer>();
-            Players.Add(player);
+            Players.Add(player.GetUUID(), player);
             player.SetDisplayName($"Player {Players.Count}");
             player.SetTeamColor(
                 (
@@ -86,7 +86,7 @@ namespace Networking
             {
                 GameoverHandler gameOverHandlerInstance = Instantiate(gameOverHandlerPrefab);
                 NetworkServer.Spawn(gameOverHandlerInstance.gameObject);
-                foreach (RTSPlayer player in Players)
+                foreach (RTSPlayer player in Players.Values)
                 {
                     GameObject baseInstance = Instantiate(
                         unitBasePrefab,

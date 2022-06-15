@@ -6,74 +6,79 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public class LobbyMenu : MonoBehaviour
+namespace Menus
 {
-    [SerializeField]
-    private GameObject lobbyUI = null;
-
-    [SerializeField]
-    private Button startGameButton = null;
-
-    [SerializeField]
-    private TMP_Text[] playerNameTexts = new TMP_Text[4];
-
-    private void Start()
+    public class LobbyMenu : MonoBehaviour
     {
-        RTSNetworkManager.ClientOnConnected += HandleClientConnected;
-        RTSPlayer.AuthorityOnPartyOwnerStateUpdated += HandlePartyOwnerStateUpdated;
-        RTSPlayer.ClientOnInfoUpdated += ClientHandleInfoUpdated;
-    }
+        [SerializeField]
+        private GameObject lobbyUI = null;
 
-    private void OnDestroy()
-    {
-        RTSNetworkManager.ClientOnConnected -= HandleClientConnected;
-        RTSPlayer.AuthorityOnPartyOwnerStateUpdated -= HandlePartyOwnerStateUpdated;
-        RTSPlayer.ClientOnInfoUpdated -= ClientHandleInfoUpdated;
-    }
+        [SerializeField]
+        private Button startGameButton = null;
 
-    public void StartGame()
-    {
-        NetworkClient.connection.identity.GetComponent<RTSPlayer>().CmdStartGame();
-    }
+        [SerializeField]
+        private List<TMP_Text> playerNameTexts;
 
-    private void ClientHandleInfoUpdated()
-    {
-        List<RTSPlayer> players = ((RTSNetworkManager)NetworkManager.singleton).Players;
-
-        for (int i = 0; i < players.Count; i++)
+        private void Start()
         {
-            playerNameTexts[i].text = players[i].GetDisplayName();
+            RTSNetworkManager.ClientOnConnected += HandleClientConnected;
+            RTSPlayer.AuthorityOnPartyOwnerStateUpdated += HandlePartyOwnerStateUpdated;
+            RTSPlayer.ClientOnInfoUpdated += ClientHandleInfoUpdated;
         }
 
-        for (int i = players.Count; i < playerNameTexts.Length; i++)
+        private void OnDestroy()
         {
-            playerNameTexts[i].text = "Waiting For Player...";
+            RTSNetworkManager.ClientOnConnected -= HandleClientConnected;
+            RTSPlayer.AuthorityOnPartyOwnerStateUpdated -= HandlePartyOwnerStateUpdated;
+            RTSPlayer.ClientOnInfoUpdated -= ClientHandleInfoUpdated;
         }
 
-        startGameButton.interactable = players.Count >= 2;
-    }
-
-    private void HandlePartyOwnerStateUpdated(bool state)
-    {
-        startGameButton.gameObject.SetActive(state);
-    }
-
-    private void HandleClientConnected()
-    {
-        lobbyUI.SetActive(true);
-    }
-
-    public void LeaveLobby()
-    {
-        if (NetworkServer.active && NetworkClient.isConnected)
+        public void StartGame()
         {
-            NetworkManager.singleton.StopHost();
-        }
-        else
-        {
-            NetworkManager.singleton.StopClient();
+            NetworkClient.connection.identity.GetComponent<RTSPlayer>().CmdStartGame();
         }
 
-        SceneManager.LoadScene(0);
+        private void ClientHandleInfoUpdated()
+        {
+            Dictionary<string, RTSPlayer> players = (
+                (RTSNetworkManager)NetworkManager.singleton
+            ).Players;
+
+            // for (int i = 0; i < players.Count; i++)
+            // {
+            //     playerNameTexts[i].text = players[i].GetDisplayName();
+            // }
+            //
+            // for (int i = players.Count; i < playerNameTexts.Length; i++)
+            // {
+            //     playerNameTexts[i].text = "Waiting For Player...";
+            // }
+
+            startGameButton.interactable = players.Count >= 2;
+        }
+
+        private void HandlePartyOwnerStateUpdated(bool state)
+        {
+            startGameButton.gameObject.SetActive(state);
+        }
+
+        private void HandleClientConnected()
+        {
+            lobbyUI.SetActive(true);
+        }
+
+        public void LeaveLobby()
+        {
+            if (NetworkServer.active && NetworkClient.isConnected)
+            {
+                NetworkManager.singleton.StopHost();
+            }
+            else
+            {
+                NetworkManager.singleton.StopClient();
+            }
+
+            SceneManager.LoadScene(0);
+        }
     }
 }

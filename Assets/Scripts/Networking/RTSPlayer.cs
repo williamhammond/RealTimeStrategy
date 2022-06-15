@@ -8,6 +8,9 @@ namespace Networking
 {
     public class RTSPlayer : NetworkBehaviour
     {
+        [SyncVar]
+        private string uuid;
+
         [SyncVar(hook = nameof(ClientHandleDisplayNameUpdated))]
         private string displayName;
 
@@ -37,6 +40,11 @@ namespace Networking
         private Color teamColor = new Color();
         private readonly List<Unit> myUnits = new List<Unit>();
         private readonly List<Building> myBuildings = new List<Building>();
+
+        public string GetUUID()
+        {
+            return uuid;
+        }
 
         public string GetDisplayName()
         {
@@ -101,9 +109,9 @@ namespace Networking
         #region Server
 
         [Server]
-        public void SetDisplayName(string displayName)
+        public void SetDisplayName(string newDisplayName)
         {
-            this.displayName = displayName;
+            displayName = newDisplayName;
         }
 
         [Server]
@@ -119,6 +127,8 @@ namespace Networking
 
             Building.ServerOnBuildingSpawned += ServerHandleBuildingSpawned;
             Building.ServerOnBuildingDespawned += ServerHandleBuildingDespawned;
+
+            uuid = Guid.NewGuid().ToString();
 
             DontDestroyOnLoad(gameObject);
         }
@@ -265,7 +275,7 @@ namespace Networking
             }
 
             DontDestroyOnLoad(gameObject);
-            ((RTSNetworkManager)NetworkManager.singleton).Players.Add(this);
+            ((RTSNetworkManager)NetworkManager.singleton).Players.Add(GetUUID(), this);
         }
 
         public override void OnStopClient()
@@ -278,7 +288,7 @@ namespace Networking
                 return;
             }
 
-            ((RTSNetworkManager)NetworkManager.singleton).Players.Remove(this);
+            ((RTSNetworkManager)NetworkManager.singleton).Players.Remove(GetUUID());
 
             if (!hasAuthority)
             {
