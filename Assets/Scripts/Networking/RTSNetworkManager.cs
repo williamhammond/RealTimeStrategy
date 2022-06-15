@@ -18,7 +18,7 @@ namespace Networking
         public static event Action ClientOnConnected;
         public static event Action ClientOnDisconnected;
 
-        public Dictionary<string, RTSPlayer> Players { get; }
+        public Dictionary<string, RTSPlayer> Players { get; } = new Dictionary<string, RTSPlayer>();
 
         private bool _isGameInProgress = false;
 
