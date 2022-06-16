@@ -42,14 +42,14 @@ namespace Buildings
         [SyncVar]
         private float unitTimer;
 
-        private RTSPlayer _player;
+        private RTSPlayer player;
         private float progressImageVelocity;
 
         private void Update()
         {
-            if (_player == null)
+            if (player == null)
             {
-                _player = NetworkClient.connection.identity.GetComponent<RTSPlayer>();
+                player = NetworkClient.connection.identity.GetComponent<RTSPlayer>();
             }
             if (isServer)
             {
@@ -111,7 +111,7 @@ namespace Buildings
             if (resources >= unitPrefab.GetCost())
             {
                 queuedUnits++;
-                _player.SetResources(_player.GetResources() - unitPrefab.GetCost());
+                player.SetResources(player.GetResources() - unitPrefab.GetCost());
             }
         }
 
