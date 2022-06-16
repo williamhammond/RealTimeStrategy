@@ -1,7 +1,4 @@
 ﻿namespace Networking
 {
-    public class RTSSteamManager : SteamManager 
-    {
-        
-    }
+    public class RTSSteamManager : SteamManager { }
 }

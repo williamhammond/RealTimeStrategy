@@ -1,55 +1,55 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using Mirror;
 using Networking;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class JoinLobbyMenu : MonoBehaviour
+namespace Menus
 {
-    [SerializeField]
-    private GameObject landingPagePanel = null;
-
-    [SerializeField]
-    private TMP_InputField addressInput = null;
-
-    [SerializeField]
-    private Button joinButton = null;
-
-    public void OnEnable()
+    public class JoinLobbyMenu : MonoBehaviour
     {
-        RTSNetworkManager.ClientOnConnected += HandleClientConnected;
-        RTSNetworkManager.ClientOnConnected += HandleClientDisconnected;
-    }
+        [SerializeField]
+        private GameObject landingPagePanel;
 
-    public void OnDisable()
-    {
-        RTSNetworkManager.ClientOnConnected -= HandleClientConnected;
-        RTSNetworkManager.ClientOnConnected -= HandleClientDisconnected;
-    }
+        [SerializeField]
+        private TMP_InputField addressInput;
 
-    public void Join()
-    {
-        string address = addressInput.text;
+        [SerializeField]
+        private Button joinButton;
 
-        NetworkManager.singleton.networkAddress = address;
-        NetworkManager.singleton.StartClient();
+        public void OnEnable()
+        {
+            RTSNetworkManager.ClientOnConnected += HandleClientConnected;
+            RTSNetworkManager.ClientOnConnected += HandleClientDisconnected;
+        }
 
-        joinButton.interactable = false;
-    }
+        public void OnDisable()
+        {
+            RTSNetworkManager.ClientOnConnected -= HandleClientConnected;
+            RTSNetworkManager.ClientOnConnected -= HandleClientDisconnected;
+        }
 
-    private void HandleClientConnected()
-    {
-        joinButton.interactable = true;
+        public void Join()
+        {
+            string address = addressInput.text;
 
-        landingPagePanel.SetActive(false);
-        gameObject.SetActive(false);
-    }
+            NetworkManager.singleton.networkAddress = address;
+            NetworkManager.singleton.StartClient();
 
-    private void HandleClientDisconnected()
-    {
-        joinButton.interactable = true;
+            joinButton.interactable = false;
+        }
+
+        private void HandleClientConnected()
+        {
+            joinButton.interactable = true;
+
+            landingPagePanel.SetActive(false);
+            gameObject.SetActive(false);
+        }
+
+        private void HandleClientDisconnected()
+        {
+            joinButton.interactable = true;
+        }
     }
 }

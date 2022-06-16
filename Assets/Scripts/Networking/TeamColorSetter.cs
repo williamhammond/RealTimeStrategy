@@ -9,7 +9,7 @@ public class TeamColorSetter : NetworkBehaviour
     private Renderer[] colorRenderers = Array.Empty<Renderer>();
 
     [SyncVar(hook = nameof(HandleTeamColorUpdated))]
-    private Color teamColor = new Color();
+    private Color teamColor;
 
     private static readonly int BaseColor = Shader.PropertyToID("_BaseColor");
 
@@ -29,9 +29,9 @@ public class TeamColorSetter : NetworkBehaviour
 
     private void HandleTeamColorUpdated(Color oldColor, Color newColor)
     {
-        foreach (Renderer renderer in colorRenderers)
+        foreach (Renderer colorRenderer in colorRenderers)
         {
-            renderer.material.SetColor(BaseColor, newColor);
+            colorRenderer.material.SetColor(BaseColor, newColor);
         }
     }
 

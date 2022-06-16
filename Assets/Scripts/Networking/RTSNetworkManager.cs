@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Buildings;
 using Mirror;
 using Steamworks;
 using Unity.Mathematics;
@@ -14,7 +15,7 @@ namespace Networking
         private GameObject unitBasePrefab;
 
         [SerializeField]
-        private bool useSteam = false;
+        private bool useSteam;
 
         [SerializeField]
         private GameoverHandler gameOverHandlerPrefab;
@@ -24,13 +25,13 @@ namespace Networking
 
         public Dictionary<string, RTSPlayer> Players { get; } = new Dictionary<string, RTSPlayer>();
 
-        private bool _isGameInProgress = false;
+        private bool isGameInProgress;
 
         #region Server
 
         public override void OnServerConnect(NetworkConnectionToClient conn)
         {
-            if (!_isGameInProgress)
+            if (!isGameInProgress)
             {
                 return;
             }
@@ -49,7 +50,7 @@ namespace Networking
         public override void OnStopServer()
         {
             Players.Clear();
-            _isGameInProgress = false;
+            isGameInProgress = false;
         }
 
         public void StartGame()
@@ -59,7 +60,7 @@ namespace Networking
                 return;
             }
 
-            _isGameInProgress = true;
+            isGameInProgress = true;
 
             ServerChangeScene("Scene_Map_Test");
         }

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Buildings;
 using Mirror;
 using Networking;
 using UnityEngine;
@@ -12,22 +13,22 @@ namespace Units
         private LayerMask layerMask;
 
         [SerializeField]
-        private RectTransform unitSelectionArea = null;
+        private RectTransform unitSelectionArea;
 
-        private Vector2 _startPosition;
+        private Vector2 startPosition;
 
-        private RTSPlayer _player;
-        private Camera _mainCamera;
-        public List<Unit> selectedUnits { get; } = new List<Unit>();
+        private RTSPlayer player;
+        private Camera mainCamera;
+        public List<Unit> selectedUnits { get; } = new();
 
         private void Start()
         {
-            _mainCamera = Camera.main;
+            mainCamera = Camera.main;
 
             Unit.AuthorityOnUnitDespawned += AuthorityHandleUnitDespawned;
             GameoverHandler.ClientOnGameOver += ClientHandleGameOver;
 
-            _player = NetworkClient.connection.identity.GetComponent<RTSPlayer>();
+            player = NetworkClient.connection.identity.GetComponent<RTSPlayer>();
         }
 
         private void OnDestroy()
@@ -65,7 +66,7 @@ namespace Units
             }
 
             unitSelectionArea.gameObject.SetActive(true);
-            _startPosition = Mouse.current.position.ReadValue();
+            startPosition = Mouse.current.position.ReadValue();
             UpdateSelectionArea();
         }
 
@@ -73,12 +74,12 @@ namespace Units
         {
             Vector2 mousePosition = Mouse.current.position.ReadValue();
 
-            float areaWidth = mousePosition.x - _startPosition.x;
-            float areaHeight = mousePosition.y - _startPosition.y;
+            float areaWidth = mousePosition.x - startPosition.x;
+            float areaHeight = mousePosition.y - startPosition.y;
 
             unitSelectionArea.sizeDelta = new Vector2(Mathf.Abs(areaWidth), Mathf.Abs(areaHeight));
             unitSelectionArea.anchoredPosition =
-                _startPosition + new Vector2(areaWidth / 2, areaHeight / 2);
+                startPosition + new Vector2(areaWidth / 2, areaHeight / 2);
         }
 
         private void ClearSelectionArea()
@@ -86,13 +87,13 @@ namespace Units
             unitSelectionArea.gameObject.SetActive(false);
             if (unitSelectionArea.sizeDelta.magnitude == 0)
             {
-                Ray ray = _mainCamera.ScreenPointToRay(Mouse.current.position.ReadValue());
+                Ray ray = mainCamera.ScreenPointToRay(Mouse.current.position.ReadValue());
                 if (!Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity))
                 {
                     return;
                 }
 
-                if (!hit.collider.TryGetComponent<Unit>(out Unit unit))
+                if (!hit.collider.TryGetComponent(out Unit unit))
                 {
                     return;
                 }
@@ -113,14 +114,14 @@ namespace Units
 
             Vector2 min = unitSelectionArea.anchoredPosition - (unitSelectionArea.sizeDelta / 2);
             Vector2 max = unitSelectionArea.anchoredPosition + (unitSelectionArea.sizeDelta / 2);
-            foreach (Unit unit in _player.GetUnits())
+            foreach (Unit unit in player.GetUnits())
             {
                 if (selectedUnits.Contains(unit))
                 {
                     continue;
                 }
 
-                Vector3 screenPosition = _mainCamera.WorldToScreenPoint(unit.transform.position);
+                Vector3 screenPosition = mainCamera.WorldToScreenPoint(unit.transform.position);
                 if (
                     screenPosition.x > min.x
                     && screenPosition.y > min.y

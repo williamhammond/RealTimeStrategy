@@ -6,7 +6,7 @@ namespace Combat
     public class Targetable : NetworkBehaviour
     {
         [SerializeField]
-        private Transform aimAtPoint = null;
+        private Transform aimAtPoint;
 
         public Transform GetAimAtPoint()
         {

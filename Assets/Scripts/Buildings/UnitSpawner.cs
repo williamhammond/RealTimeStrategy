@@ -1,4 +1,3 @@
-using System;
 using Combat;
 using Mirror;
 using Networking;
@@ -14,19 +13,19 @@ namespace Buildings
     public class UnitSpawner : NetworkBehaviour, IPointerClickHandler
     {
         [SerializeField]
-        private Unit unitPrefab = null;
+        private Unit unitPrefab;
 
         [SerializeField]
-        private Transform unitSpawnPoint = null;
+        private Transform unitSpawnPoint;
 
         [SerializeField]
-        private Health health = null;
+        private Health health;
 
         [SerializeField]
-        private TMP_Text remainingUnitsText = null;
+        private TMP_Text remainingUnitsText;
 
         [SerializeField]
-        private Image unitProgressImage = null;
+        private Image unitProgressImage;
 
         [SerializeField]
         private int maxUnitQueue = 5;
@@ -43,14 +42,14 @@ namespace Buildings
         [SyncVar]
         private float unitTimer;
 
-        private RTSPlayer _player;
+        private RTSPlayer player;
         private float progressImageVelocity;
 
         private void Update()
         {
-            if (_player == null)
+            if (player == null)
             {
-                _player = NetworkClient.connection.identity.GetComponent<RTSPlayer>();
+                player = NetworkClient.connection.identity.GetComponent<RTSPlayer>();
             }
             if (isServer)
             {
@@ -112,7 +111,7 @@ namespace Buildings
             if (resources >= unitPrefab.GetCost())
             {
                 queuedUnits++;
-                _player.SetResources(_player.GetResources() - unitPrefab.GetCost());
+                player.SetResources(player.GetResources() - unitPrefab.GetCost());
             }
         }
 
