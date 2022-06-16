@@ -4,7 +4,6 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 
 namespace Cameras
-
 {
     public class CameraController : NetworkBehaviour
     {
