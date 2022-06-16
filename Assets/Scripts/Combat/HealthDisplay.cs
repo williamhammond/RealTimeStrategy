@@ -1,43 +1,42 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using Combat;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class HealthDisplay : MonoBehaviour
+namespace Combat
 {
-    [SerializeField]
-    private Health health;
-
-    [SerializeField]
-    private GameObject healthBarParent;
-
-    [SerializeField]
-    private Image healthBarImage;
-
-    private void Awake()
+    public class HealthDisplay : MonoBehaviour
     {
-        health.ClientOnHealthUpdated += HandleHealthUpdated;
-    }
+        [SerializeField]
+        private Health health;
 
-    private void OnDestroy()
-    {
-        health.ClientOnHealthUpdated -= HandleHealthUpdated;
-    }
+        [SerializeField]
+        private GameObject healthBarParent;
 
-    private void OnMouseEnter()
-    {
-        healthBarParent.SetActive(true);
-    }
+        [SerializeField]
+        private Image healthBarImage;
 
-    private void OnMouseExit()
-    {
-        healthBarParent.SetActive(false);
-    }
+        private void Awake()
+        {
+            health.ClientOnHealthUpdated += HandleHealthUpdated;
+        }
 
-    private void HandleHealthUpdated(int currentHealth, int maxHealth)
-    {
-        healthBarImage.fillAmount = currentHealth / (float)maxHealth;
+        private void OnDestroy()
+        {
+            health.ClientOnHealthUpdated -= HandleHealthUpdated;
+        }
+
+        private void OnMouseEnter()
+        {
+            healthBarParent.SetActive(true);
+        }
+
+        private void OnMouseExit()
+        {
+            healthBarParent.SetActive(false);
+        }
+
+        private void HandleHealthUpdated(int currentHealth, int maxHealth)
+        {
+            healthBarImage.fillAmount = currentHealth / (float)maxHealth;
+        }
     }
 }

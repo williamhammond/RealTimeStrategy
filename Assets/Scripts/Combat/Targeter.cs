@@ -6,11 +6,11 @@ namespace Combat
 {
     public class Targeter : NetworkBehaviour
     {
-        private Targetable _target;
+        private Targetable target;
 
         public Targetable GetTarget()
         {
-            return _target;
+            return target;
         }
 
         #region Server
@@ -33,17 +33,17 @@ namespace Combat
         [Command]
         public void CmdSetTarget(GameObject targetGameObject)
         {
-            if (!targetGameObject.TryGetComponent<Targetable>(out Targetable target))
+            if (!targetGameObject.TryGetComponent(out Targetable newTarget))
             {
                 return;
             }
-            this._target = target;
+            target = newTarget;
         }
 
         [Server]
         public void ClearTarget()
         {
-            _target = null;
+            target = null;
         }
         #endregion
     }
