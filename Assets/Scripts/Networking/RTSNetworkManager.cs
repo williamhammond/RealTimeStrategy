@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Mirror;
+using Steamworks;
 using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -13,12 +14,15 @@ namespace Networking
         private GameObject unitBasePrefab;
 
         [SerializeField]
+        private bool useSteam = false;
+
+        [SerializeField]
         private GameoverHandler gameOverHandlerPrefab;
 
         public static event Action ClientOnConnected;
         public static event Action ClientOnDisconnected;
 
-        public List<RTSPlayer> Players { get; } = new List<RTSPlayer>();
+        public Dictionary<string, RTSPlayer> Players { get; } = new Dictionary<string, RTSPlayer>();
 
         private bool _isGameInProgress = false;
 
@@ -37,7 +41,7 @@ namespace Networking
         public override void OnServerDisconnect(NetworkConnectionToClient conn)
         {
             RTSPlayer player = conn.identity.GetComponent<RTSPlayer>();
-            Players.Remove(player);
+            Players.Remove(player.GetUUID());
 
             base.OnServerDisconnect(conn);
         }
@@ -65,8 +69,11 @@ namespace Networking
             base.OnServerAddPlayer(conn);
 
             RTSPlayer player = conn.identity.GetComponent<RTSPlayer>();
-            Players.Add(player);
-            player.SetDisplayName($"Player {Players.Count}");
+            Players.Add(player.GetUUID(), player);
+
+            player.SetDisplayName(
+                useSteam ? SteamFriends.GetPersonaName() : $"Player {Players.Count}"
+            );
             player.SetTeamColor(
                 (
                     new Color(
@@ -86,7 +93,7 @@ namespace Networking
             {
                 GameoverHandler gameOverHandlerInstance = Instantiate(gameOverHandlerPrefab);
                 NetworkServer.Spawn(gameOverHandlerInstance.gameObject);
-                foreach (RTSPlayer player in Players)
+                foreach (RTSPlayer player in Players.Values)
                 {
                     GameObject baseInstance = Instantiate(
                         unitBasePrefab,
