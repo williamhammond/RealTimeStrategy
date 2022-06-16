@@ -24,7 +24,7 @@ namespace Networking
         private int resources = 500;
 
         [SerializeField]
-        private LayerMask buildBlockLayer = new LayerMask();
+        private LayerMask buildBlockLayer;
 
         [SerializeField]
         private float buildingRangeLimit = 5f;
@@ -35,9 +35,9 @@ namespace Networking
         public static event Action<bool> AuthorityOnPartyOwnerStateUpdated;
 
         [SyncVar(hook = nameof(AuthorityHandlePartyOwnerStateUpdated))]
-        private bool isPartyOwner = false;
+        private bool isPartyOwner;
 
-        private Color teamColor = new Color();
+        private Color teamColor;
         private readonly List<Unit> myUnits = new List<Unit>();
         private readonly List<Building> myBuildings = new List<Building>();
 

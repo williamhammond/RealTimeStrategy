@@ -12,7 +12,7 @@ namespace Units
         private LayerMask layerMask;
 
         [SerializeField]
-        private RectTransform unitSelectionArea = null;
+        private RectTransform unitSelectionArea;
 
         private Vector2 _startPosition;
 

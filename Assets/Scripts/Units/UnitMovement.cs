@@ -6,10 +6,10 @@ using UnityEngine.AI;
 public class UnitMovement : NetworkBehaviour
 {
     [SerializeField]
-    private NavMeshAgent agent = null;
+    private NavMeshAgent agent;
 
     [SerializeField]
-    private Targeter targeter = null;
+    private Targeter targeter;
 
     [SerializeField]
     private float chaseRange = 10f;

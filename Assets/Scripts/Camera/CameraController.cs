@@ -7,7 +7,7 @@ using UnityEngine.InputSystem;
 public class CameraController : NetworkBehaviour
 {
     [SerializeField]
-    private Transform playerCameraTransform = null;
+    private Transform playerCameraTransform;
 
     [SerializeField]
     private float speed = 20f;

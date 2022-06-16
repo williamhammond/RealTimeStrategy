@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using Mirror;
 using Networking;
-using Steamworks;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -12,10 +11,10 @@ namespace Menus
     public class LobbyMenu : MonoBehaviour
     {
         [SerializeField]
-        private GameObject lobbyUI = null;
+        private GameObject lobbyUI;
 
         [SerializeField]
-        private Button startGameButton = null;
+        private Button startGameButton;
 
         [SerializeField]
         private List<TMP_Text> playerNameTexts;

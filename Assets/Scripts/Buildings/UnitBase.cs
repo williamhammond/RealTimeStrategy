@@ -6,7 +6,7 @@ using UnityEngine;
 public class UnitBase : NetworkBehaviour
 {
     [SerializeField]
-    private Health health = null;
+    private Health health;
 
     public static event Action<int> ServerOnPlayerDie;
     public static event Action<UnitBase> ServerOnBaseSpawned;

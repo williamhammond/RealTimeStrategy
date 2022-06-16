@@ -15,13 +15,13 @@ public class BuildingButton : MonoBehaviour, IPointerDownHandler, IPointerUpHand
     private Building _building;
 
     [SerializeField]
-    private Image iconImage = null;
+    private Image iconImage;
 
     [SerializeField]
-    private TMP_Text priceText = null;
+    private TMP_Text priceText;
 
     [SerializeField]
-    private LayerMask floorMask = new LayerMask();
+    private LayerMask floorMask;
 
     private Camera mainCamera;
     private RTSPlayer player;

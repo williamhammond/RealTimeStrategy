@@ -9,7 +9,7 @@ namespace Resources
     public class ResourcesDisplay : MonoBehaviour
     {
         [SerializeField]
-        private TMP_Text resourcesText = null;
+        private TMP_Text resourcesText;
 
         private RTSPlayer player;
 

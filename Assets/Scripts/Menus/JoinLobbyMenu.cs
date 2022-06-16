@@ -1,6 +1,3 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using Mirror;
 using Networking;
 using TMPro;
@@ -10,13 +7,13 @@ using UnityEngine.UI;
 public class JoinLobbyMenu : MonoBehaviour
 {
     [SerializeField]
-    private GameObject landingPagePanel = null;
+    private GameObject landingPagePanel;
 
     [SerializeField]
-    private TMP_InputField addressInput = null;
+    private TMP_InputField addressInput;
 
     [SerializeField]
-    private Button joinButton = null;
+    private Button joinButton;
 
     public void OnEnable()
     {

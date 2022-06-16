@@ -5,7 +5,7 @@ using UnityEngine;
 public class Building : NetworkBehaviour
 {
     [SerializeField]
-    private Sprite icon = null;
+    private Sprite icon;
 
     [SerializeField]
     private int id = -1;
@@ -14,7 +14,7 @@ public class Building : NetworkBehaviour
     private int price = 100;
 
     [SerializeField]
-    private GameObject buildingPreview = null;
+    private GameObject buildingPreview;
 
     public static event Action<Building> ServerOnBuildingSpawned;
     public static event Action<Building> ServerOnBuildingDespawned;

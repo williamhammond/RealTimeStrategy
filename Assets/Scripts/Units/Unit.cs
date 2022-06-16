@@ -9,16 +9,16 @@ namespace Units
     public class Unit : NetworkBehaviour
     {
         [SerializeField]
-        private UnityEvent onSelected = null;
+        private UnityEvent onSelected;
 
         [SerializeField]
-        private UnityEvent onDeselected = null;
+        private UnityEvent onDeselected;
 
         [SerializeField]
-        private UnitMovement unitMovement = null;
+        private UnitMovement unitMovement;
 
         [SerializeField]
-        private Targeter targeter = null;
+        private Targeter targeter;
 
         [SerializeField]
         private Health health;

@@ -7,7 +7,7 @@ using UnityEngine.InputSystem;
 public class Minimap : MonoBehaviour, IPointerDownHandler, IDragHandler
 {
     [SerializeField]
-    private RectTransform minimapRect = null;
+    private RectTransform minimapRect;
 
     [SerializeField]
     private float mapScale = 20f;

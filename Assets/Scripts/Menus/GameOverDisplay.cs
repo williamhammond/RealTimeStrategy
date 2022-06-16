@@ -7,10 +7,10 @@ namespace Menus
     public class GameOverDisplay : MonoBehaviour
     {
         [SerializeField]
-        private TMP_Text winnerNameText = null;
+        private TMP_Text winnerNameText;
 
         [SerializeField]
-        private GameObject gameOverDisplayParent = null;
+        private GameObject gameOverDisplayParent;
 
         private void Start()
         {

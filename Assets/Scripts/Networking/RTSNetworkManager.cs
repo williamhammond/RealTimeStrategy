@@ -14,7 +14,7 @@ namespace Networking
         private GameObject unitBasePrefab;
 
         [SerializeField]
-        private bool useSteam = false;
+        private bool useSteam;
 
         [SerializeField]
         private GameoverHandler gameOverHandlerPrefab;
@@ -24,7 +24,7 @@ namespace Networking
 
         public Dictionary<string, RTSPlayer> Players { get; } = new Dictionary<string, RTSPlayer>();
 
-        private bool _isGameInProgress = false;
+        private bool _isGameInProgress;
 
         #region Server
 

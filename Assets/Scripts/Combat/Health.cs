@@ -7,7 +7,7 @@ namespace Combat
     public class Health : NetworkBehaviour
     {
         [SerializeField]
-        private int maxHealth = 0;
+        private int maxHealth;
 
         [SyncVar(hook = nameof(HandleHealthUpdated))]
         private int currentHealth;

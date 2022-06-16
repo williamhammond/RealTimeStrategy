@@ -14,19 +14,19 @@ namespace Buildings
     public class UnitSpawner : NetworkBehaviour, IPointerClickHandler
     {
         [SerializeField]
-        private Unit unitPrefab = null;
+        private Unit unitPrefab;
 
         [SerializeField]
-        private Transform unitSpawnPoint = null;
+        private Transform unitSpawnPoint;
 
         [SerializeField]
-        private Health health = null;
+        private Health health;
 
         [SerializeField]
-        private TMP_Text remainingUnitsText = null;
+        private TMP_Text remainingUnitsText;
 
         [SerializeField]
-        private Image unitProgressImage = null;
+        private Image unitProgressImage;
 
         [SerializeField]
         private int maxUnitQueue = 5;

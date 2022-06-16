@@ -5,10 +5,10 @@ using UnityEngine;
 public class MainMenu : MonoBehaviour
 {
     [SerializeField]
-    private GameObject landingPagePanel = null;
+    private GameObject landingPagePanel;
 
     [SerializeField]
-    private bool useSteam = false;
+    private bool useSteam;
 
     protected Callback<LobbyCreated_t> lobbyCreated;
     protected Callback<GameLobbyJoinRequested_t> gameLobbyJoinRequested;

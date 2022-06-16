@@ -7,7 +7,7 @@ namespace Units
     public class UnitProjectile : NetworkBehaviour
     {
         [SerializeField]
-        private Rigidbody rigidbody = null;
+        private Rigidbody rigidbody;
 
         [SerializeField]
         private float destroyAfterSeconds = 5f;

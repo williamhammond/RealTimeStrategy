@@ -8,13 +8,13 @@ using UnityEngine.UI;
 public class HealthDisplay : MonoBehaviour
 {
     [SerializeField]
-    private Health health = null;
+    private Health health;
 
     [SerializeField]
-    private GameObject healthBarParent = null;
+    private GameObject healthBarParent;
 
     [SerializeField]
-    private Image healthBarImage = null;
+    private Image healthBarImage;
 
     private void Awake()
     {
