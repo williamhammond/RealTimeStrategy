@@ -37,14 +37,14 @@ namespace Units
         [ServerCallback]
         void OnTriggerEnter(Collider other)
         {
-            if (other.TryGetComponent<NetworkIdentity>(out NetworkIdentity networkIdentity))
+            if (other.TryGetComponent(out NetworkIdentity networkIdentity))
             {
                 if (networkIdentity.connectionToClient == connectionToClient)
                 {
                     return;
                 }
 
-                if (other.TryGetComponent<Health>(out Health health))
+                if (other.TryGetComponent(out Health health))
                 {
                     health.DealDamage(damage);
                 }

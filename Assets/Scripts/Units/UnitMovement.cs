@@ -4,75 +4,78 @@ using Mirror;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class UnitMovement : NetworkBehaviour
+namespace Units
 {
-    [SerializeField]
-    private NavMeshAgent agent;
-
-    [SerializeField]
-    private Targeter targeter;
-
-    [SerializeField]
-    private float chaseRange = 10f;
-
-    #region Server
-
-    public override void OnStartServer()
+    public class UnitMovement : NetworkBehaviour
     {
-        GameoverHandler.ServerOnGameOver += ServerHandleOnGameOver;
-    }
+        [SerializeField]
+        private NavMeshAgent agent;
 
-    public override void OnStopServer()
-    {
-        GameoverHandler.ServerOnGameOver -= ServerHandleOnGameOver;
-    }
+        [SerializeField]
+        private Targeter targeter;
 
-    [Server]
-    public void ServerMove(Vector3 moveTo)
-    {
-        targeter.ClearTarget();
+        [SerializeField]
+        private float chaseRange = 10f;
 
-        if (!NavMesh.SamplePosition(moveTo, out NavMeshHit hit, 1f, NavMesh.AllAreas))
+        #region Server
+
+        public override void OnStartServer()
         {
-            return;
+            GameoverHandler.ServerOnGameOver += ServerHandleOnGameOver;
         }
-        agent.SetDestination(hit.position);
-    }
 
-    [Server]
-    private void ServerHandleOnGameOver()
-    {
-        agent.ResetPath();
-    }
-
-    [ServerCallback]
-    private void Update()
-    {
-        if (targeter.GetTarget())
+        public override void OnStopServer()
         {
-            if (
-                (targeter.GetTarget().transform.position - transform.position).sqrMagnitude
-                > chaseRange * chaseRange
-            )
-            {
-                agent.SetDestination(targeter.GetTarget().transform.position);
-            }
-            else if (agent.hasPath)
-            {
-                agent.ResetPath();
-            }
-            return;
+            GameoverHandler.ServerOnGameOver -= ServerHandleOnGameOver;
         }
-        if (agent.hasPath && agent.remainingDistance <= agent.stoppingDistance)
+
+        [Server]
+        public void ServerMove(Vector3 moveTo)
+        {
+            targeter.ClearTarget();
+
+            if (!NavMesh.SamplePosition(moveTo, out NavMeshHit hit, 1f, NavMesh.AllAreas))
+            {
+                return;
+            }
+            agent.SetDestination(hit.position);
+        }
+
+        [Server]
+        private void ServerHandleOnGameOver()
         {
             agent.ResetPath();
         }
-    }
 
-    [Command]
-    public void CmdMove(Vector3 moveTo)
-    {
-        ServerMove(moveTo);
+        [ServerCallback]
+        private void Update()
+        {
+            if (targeter.GetTarget())
+            {
+                if (
+                    (targeter.GetTarget().transform.position - transform.position).sqrMagnitude
+                    > chaseRange * chaseRange
+                )
+                {
+                    agent.SetDestination(targeter.GetTarget().transform.position);
+                }
+                else if (agent.hasPath)
+                {
+                    agent.ResetPath();
+                }
+                return;
+            }
+            if (agent.hasPath && agent.remainingDistance <= agent.stoppingDistance)
+            {
+                agent.ResetPath();
+            }
+        }
+
+        [Command]
+        public void CmdMove(Vector3 moveTo)
+        {
+            ServerMove(moveTo);
+        }
+        #endregion
     }
-    #endregion
 }

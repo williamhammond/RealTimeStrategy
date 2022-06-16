@@ -24,7 +24,7 @@ namespace Units
         [SerializeField]
         private float rotationSpeed = 20f;
 
-        private float _lastFireTime;
+        private float lastFireTime;
 
         [ServerCallback]
         private void Update()
@@ -48,7 +48,7 @@ namespace Units
                 rotationSpeed * Time.deltaTime
             );
 
-            if (Time.time > (1 / fireRate) + _lastFireTime)
+            if (Time.time > (1 / fireRate) + lastFireTime)
             {
                 var projectilePosition = projectileSpawnPoint.position;
                 Quaternion projectileRotation = Quaternion.LookRotation(
@@ -60,7 +60,7 @@ namespace Units
                     projectileRotation
                 );
                 NetworkServer.Spawn(projectileInstance, connectionToClient);
-                _lastFireTime = Time.time;
+                lastFireTime = Time.time;
             }
         }
 
