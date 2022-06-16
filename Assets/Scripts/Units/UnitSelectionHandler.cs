@@ -57,7 +57,7 @@ namespace Units
         {
             if (!Keyboard.current.leftShiftKey.isPressed)
             {
-                foreach (Unit selected in selectedUnits)
+                foreach (var selected in selectedUnits)
                 {
                     selected.Deselect();
                 }
@@ -72,10 +72,10 @@ namespace Units
 
         private void UpdateSelectionArea()
         {
-            Vector2 mousePosition = Mouse.current.position.ReadValue();
+            var mousePosition = Mouse.current.position.ReadValue();
 
-            float areaWidth = mousePosition.x - startPosition.x;
-            float areaHeight = mousePosition.y - startPosition.y;
+            var areaWidth = mousePosition.x - startPosition.x;
+            var areaHeight = mousePosition.y - startPosition.y;
 
             unitSelectionArea.sizeDelta = new Vector2(Mathf.Abs(areaWidth), Mathf.Abs(areaHeight));
             unitSelectionArea.anchoredPosition =
@@ -87,8 +87,8 @@ namespace Units
             unitSelectionArea.gameObject.SetActive(false);
             if (unitSelectionArea.sizeDelta.magnitude == 0)
             {
-                Ray ray = mainCamera.ScreenPointToRay(Mouse.current.position.ReadValue());
-                if (!Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity))
+                var ray = mainCamera.ScreenPointToRay(Mouse.current.position.ReadValue());
+                if (!Physics.Raycast(ray, out var hit, Mathf.Infinity))
                 {
                     return;
                 }
@@ -104,7 +104,7 @@ namespace Units
                 }
 
                 selectedUnits.Add(unit);
-                foreach (Unit selected in selectedUnits)
+                foreach (var selected in selectedUnits)
                 {
                     selected.Select();
                 }
@@ -112,16 +112,16 @@ namespace Units
                 return;
             }
 
-            Vector2 min = unitSelectionArea.anchoredPosition - (unitSelectionArea.sizeDelta / 2);
-            Vector2 max = unitSelectionArea.anchoredPosition + (unitSelectionArea.sizeDelta / 2);
-            foreach (Unit unit in player.GetUnits())
+            var min = unitSelectionArea.anchoredPosition - unitSelectionArea.sizeDelta / 2;
+            var max = unitSelectionArea.anchoredPosition + unitSelectionArea.sizeDelta / 2;
+            foreach (var unit in player.GetUnits())
             {
                 if (selectedUnits.Contains(unit))
                 {
                     continue;
                 }
 
-                Vector3 screenPosition = mainCamera.WorldToScreenPoint(unit.transform.position);
+                var screenPosition = mainCamera.WorldToScreenPoint(unit.transform.position);
                 if (
                     screenPosition.x > min.x
                     && screenPosition.y > min.y

@@ -8,9 +8,9 @@ namespace Cameras
 
         private void Start()
         {
-            if (UnityEngine.Camera.main != null)
+            if (Camera.main != null)
             {
-                mainCameraTransform = UnityEngine.Camera.main.transform;
+                mainCameraTransform = Camera.main.transform;
             }
         }
 

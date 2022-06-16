@@ -6,7 +6,6 @@ using Units;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
-using Random = UnityEngine.Random;
 
 namespace Buildings
 {
@@ -82,7 +81,7 @@ namespace Buildings
             unitTimer += Time.deltaTime;
             if (unitTimer > unitSpawnDuration)
             {
-                Unit unitInstance = Instantiate(
+                var unitInstance = Instantiate(
                     unitPrefab,
                     unitSpawnPoint.position,
                     unitSpawnPoint.rotation
@@ -91,7 +90,7 @@ namespace Buildings
 
                 Vector3 spawnOffset = Random.insideUnitCircle * spawnMoveRange;
                 spawnOffset.y = unitSpawnPoint.position.y;
-                UnitMovement unitMovement = unitInstance.GetUnitMovement();
+                var unitMovement = unitInstance.GetUnitMovement();
                 unitMovement.ServerMove(unitSpawnPoint.position + spawnOffset);
 
                 queuedUnits--;
@@ -107,7 +106,7 @@ namespace Buildings
                 return;
             }
 
-            int resources = connectionToClient.identity.GetComponent<RTSPlayer>().GetResources();
+            var resources = connectionToClient.identity.GetComponent<RTSPlayer>().GetResources();
             if (resources >= unitPrefab.GetCost())
             {
                 queuedUnits++;
@@ -131,7 +130,7 @@ namespace Buildings
 
         private void UpdateTimerDisplay()
         {
-            float newProgress = unitTimer / unitSpawnDuration;
+            var newProgress = unitTimer / unitSpawnDuration;
             if (newProgress < unitProgressImage.fillAmount)
             {
                 unitProgressImage.fillAmount = newProgress;

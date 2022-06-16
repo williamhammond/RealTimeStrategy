@@ -34,7 +34,7 @@ namespace Units
         {
             targeter.ClearTarget();
 
-            if (!NavMesh.SamplePosition(moveTo, out NavMeshHit hit, 1f, NavMesh.AllAreas))
+            if (!NavMesh.SamplePosition(moveTo, out var hit, 1f, NavMesh.AllAreas))
             {
                 return;
             }

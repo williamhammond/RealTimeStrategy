@@ -36,7 +36,7 @@ namespace Buildings
             bases.Remove(unitBase);
             if (bases.Count < 2)
             {
-                int playerId = bases[0].connectionToClient.connectionId;
+                var playerId = bases[0].connectionToClient.connectionId;
                 RpcGameOver($"Player {playerId}");
                 ServerOnGameOver?.Invoke();
             }

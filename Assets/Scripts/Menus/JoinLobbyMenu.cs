@@ -31,7 +31,7 @@ namespace Menus
 
         public void Join()
         {
-            string address = addressInput.text;
+            var address = addressInput.text;
 
             NetworkManager.singleton.networkAddress = address;
             NetworkManager.singleton.StartClient();

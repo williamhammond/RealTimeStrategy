@@ -39,8 +39,8 @@ namespace Networking
         private bool isPartyOwner;
 
         private Color teamColor;
-        private readonly List<Unit> myUnits = new List<Unit>();
-        private readonly List<Building> myBuildings = new List<Building>();
+        private readonly List<Unit> myUnits = new();
+        private readonly List<Building> myBuildings = new();
 
         public string GetUUID()
         {
@@ -84,15 +84,15 @@ namespace Networking
 
         public bool CanPlaceBuilding(BoxCollider buildingCollider, Vector3 position)
         {
-            bool isOverlapping = Physics.CheckBox(
+            var isOverlapping = Physics.CheckBox(
                 position + buildingCollider.center,
                 buildingCollider.size / 2,
                 Quaternion.identity,
                 buildBlockLayer
             );
 
-            bool inRange = false;
-            foreach (Building building in myBuildings)
+            var inRange = false;
+            foreach (var building in myBuildings)
             {
                 if (
                     (position - building.transform.position).sqrMagnitude
@@ -146,7 +146,7 @@ namespace Networking
         [Server]
         public void SetResources(int newResources)
         {
-            this.resources = newResources;
+            resources = newResources;
         }
 
         [Server]
@@ -170,7 +170,7 @@ namespace Networking
         public void CmdTryPlaceBuilding(int buildingId, Vector3 position)
         {
             Building buildingToPlace = null;
-            foreach (Building building in buildings)
+            foreach (var building in buildings)
             {
                 if (building.GetId() == buildingId)
                 {
@@ -189,13 +189,13 @@ namespace Networking
                 return;
             }
 
-            BoxCollider buildingCollider = buildingToPlace.GetComponent<BoxCollider>();
+            var buildingCollider = buildingToPlace.GetComponent<BoxCollider>();
             if (!CanPlaceBuilding(buildingCollider, position))
             {
                 return;
             }
 
-            GameObject buildingInstance = Instantiate(
+            var buildingInstance = Instantiate(
                 buildingToPlace.gameObject,
                 position,
                 buildingToPlace.transform.rotation

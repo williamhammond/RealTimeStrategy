@@ -41,18 +41,18 @@ namespace Menus
         // TODO make UI dynamic or add better player count configuration and guards
         private void ClientHandleInfoUpdated()
         {
-            Dictionary<string, RTSPlayer> players = (
+            var players = (
                 (RTSNetworkManager)NetworkManager.singleton
             ).Players;
 
-            int playerIndex = 0;
-            foreach (KeyValuePair<string, RTSPlayer> pair in players)
+            var playerIndex = 0;
+            foreach (var pair in players)
             {
                 playerNameTexts[playerIndex].text = pair.Value.GetDisplayName();
                 playerIndex++;
             }
 
-            for (int i = players.Count; i < playerNameTexts.Count; i++)
+            for (var i = players.Count; i < playerNameTexts.Count; i++)
             {
                 playerNameTexts[i].text = "Waiting For Player...";
             }

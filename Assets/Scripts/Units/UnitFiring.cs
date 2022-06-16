@@ -38,7 +38,7 @@ namespace Units
                 return;
             }
 
-            Quaternion targetRotation = Quaternion.LookRotation(
+            var targetRotation = Quaternion.LookRotation(
                 targeter.GetTarget().transform.position - transform.position
             );
 
@@ -48,13 +48,13 @@ namespace Units
                 rotationSpeed * Time.deltaTime
             );
 
-            if (Time.time > (1 / fireRate) + lastFireTime)
+            if (Time.time > 1 / fireRate + lastFireTime)
             {
                 var projectilePosition = projectileSpawnPoint.position;
-                Quaternion projectileRotation = Quaternion.LookRotation(
+                var projectileRotation = Quaternion.LookRotation(
                     targeter.GetTarget().GetAimAtPoint().position - projectilePosition
                 );
-                GameObject projectileInstance = Instantiate(
+                var projectileInstance = Instantiate(
                     projectilePrefab,
                     projectilePosition,
                     projectileRotation

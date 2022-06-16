@@ -51,13 +51,13 @@ namespace Cameras
 
         private void UpdateCameraPosition()
         {
-            Vector3 position = playerCameraTransform.position;
+            var position = playerCameraTransform.position;
 
             if (previousInput == Vector2.zero)
             {
-                Vector3 cursorMovement = Vector3.zero;
+                var cursorMovement = Vector3.zero;
 
-                Vector2 cursorPosition = Mouse.current.position.ReadValue();
+                var cursorPosition = Mouse.current.position.ReadValue();
 
                 if (cursorPosition.y >= Screen.height - screenBorderThickness)
                 {

@@ -43,14 +43,14 @@ namespace Cameras
 
         private void MoveCamera()
         {
-            Vector2 mousePos = Mouse.current.position.ReadValue();
+            var mousePos = Mouse.current.position.ReadValue();
 
             if (
                 !RectTransformUtility.ScreenPointToLocalPointInRectangle(
                     minimapRect,
                     mousePos,
                     null,
-                    out Vector2 localPoint
+                    out var localPoint
                 )
             )
             {
@@ -58,11 +58,11 @@ namespace Cameras
             }
 
             var rect = minimapRect.rect;
-            Vector2 lerp = new Vector2(
+            var lerp = new Vector2(
                 (localPoint.x - rect.x) / rect.width,
                 (localPoint.y - rect.y) / rect.height
             );
-            Vector3 newCameraPos = new Vector3(
+            var newCameraPos = new Vector3(
                 Mathf.Lerp(-mapScale, mapScale, lerp.x),
                 playerCameraTransform.position.y,
                 Mathf.Lerp(-mapScale, mapScale, lerp.y)

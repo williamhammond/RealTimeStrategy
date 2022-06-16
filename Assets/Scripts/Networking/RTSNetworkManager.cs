@@ -6,6 +6,7 @@ using Steamworks;
 using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using Random = UnityEngine.Random;
 
 namespace Networking
 {
@@ -23,7 +24,7 @@ namespace Networking
         public static event Action ClientOnConnected;
         public static event Action ClientOnDisconnected;
 
-        public Dictionary<string, RTSPlayer> Players { get; } = new Dictionary<string, RTSPlayer>();
+        public Dictionary<string, RTSPlayer> Players { get; } = new();
 
         private bool isGameInProgress;
 
@@ -41,7 +42,7 @@ namespace Networking
 
         public override void OnServerDisconnect(NetworkConnectionToClient conn)
         {
-            RTSPlayer player = conn.identity.GetComponent<RTSPlayer>();
+            var player = conn.identity.GetComponent<RTSPlayer>();
             Players.Remove(player.GetUUID());
 
             base.OnServerDisconnect(conn);
@@ -69,19 +70,17 @@ namespace Networking
         {
             base.OnServerAddPlayer(conn);
 
-            RTSPlayer player = conn.identity.GetComponent<RTSPlayer>();
+            var player = conn.identity.GetComponent<RTSPlayer>();
             Players.Add(player.GetUUID(), player);
 
             player.SetDisplayName(
                 useSteam ? SteamFriends.GetPersonaName() : $"Player {Players.Count}"
             );
             player.SetTeamColor(
-                (
-                    new Color(
-                        UnityEngine.Random.Range(0f, 1f),
-                        UnityEngine.Random.Range(0f, 1f),
-                        UnityEngine.Random.Range(0f, 1f)
-                    )
+                new Color(
+                    Random.Range(0f, 1f),
+                    Random.Range(0f, 1f),
+                    Random.Range(0f, 1f)
                 )
             );
 
@@ -92,11 +91,11 @@ namespace Networking
         {
             if (SceneManager.GetActiveScene().name.StartsWith("Scene_Map"))
             {
-                GameoverHandler gameOverHandlerInstance = Instantiate(gameOverHandlerPrefab);
+                var gameOverHandlerInstance = Instantiate(gameOverHandlerPrefab);
                 NetworkServer.Spawn(gameOverHandlerInstance.gameObject);
-                foreach (RTSPlayer player in Players.Values)
+                foreach (var player in Players.Values)
                 {
-                    GameObject baseInstance = Instantiate(
+                    var baseInstance = Instantiate(
                         unitBasePrefab,
                         GetStartPosition().position,
                         quaternion.identity

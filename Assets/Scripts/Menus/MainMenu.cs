@@ -66,7 +66,7 @@ public class MainMenu : MonoBehaviour
         {
             return;
         }
-        string hostAddress = SteamMatchmaking.GetLobbyData(
+        var hostAddress = SteamMatchmaking.GetLobbyData(
             new CSteamID(callback.m_ulSteamIDLobby),
             "HostAddress"
         );

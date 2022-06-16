@@ -27,8 +27,8 @@ namespace Units
             {
                 return;
             }
-            Ray ray = mainCamera.ScreenPointToRay(Mouse.current.position.ReadValue());
-            if (!Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, _layerMask))
+            var ray = mainCamera.ScreenPointToRay(Mouse.current.position.ReadValue());
+            if (!Physics.Raycast(ray, out var hit, Mathf.Infinity, _layerMask))
             {
                 return;
             }
@@ -46,7 +46,7 @@ namespace Units
 
         private void TryTarget(Targetable target)
         {
-            foreach (Unit unit in _unitSelectionHandler.selectedUnits)
+            foreach (var unit in _unitSelectionHandler.selectedUnits)
             {
                 unit.GetTargeter().CmdSetTarget(target.gameObject);
             }
@@ -54,7 +54,7 @@ namespace Units
 
         private void TryMove(Vector3 point)
         {
-            foreach (Unit unit in _unitSelectionHandler.selectedUnits)
+            foreach (var unit in _unitSelectionHandler.selectedUnits)
             {
                 unit.GetUnitMovement().CmdMove(point);
             }
