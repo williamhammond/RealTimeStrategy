@@ -74,14 +74,12 @@ namespace Networking
             Players.Add(player.GetUUID(), player);
 
             player.SetDisplayName(
-                useSteam ? SteamFriends.GetPersonaName() : $"Player {Players.Count}"
+                useSteam && SteamManager.Initialized
+                  ? SteamFriends.GetPersonaName()
+                  : $"Player {Players.Count}"
             );
             player.SetTeamColor(
-                new Color(
-                    Random.Range(0f, 1f),
-                    Random.Range(0f, 1f),
-                    Random.Range(0f, 1f)
-                )
+                new Color(Random.Range(0f, 1f), Random.Range(0f, 1f), Random.Range(0f, 1f))
             );
 
             player.SetPartyOwner(Players.Count == 1);

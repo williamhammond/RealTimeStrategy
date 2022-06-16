@@ -16,7 +16,7 @@ public class MainMenu : MonoBehaviour
 
     private void Start()
     {
-        if (useSteam)
+        if (useSteam && SteamManager.Initialized)
         {
             lobbyCreated = Callback<LobbyCreated_t>.Create(OnLobbyCreated);
             gameLobbyJoinRequested = Callback<GameLobbyJoinRequested_t>.Create(
@@ -30,7 +30,7 @@ public class MainMenu : MonoBehaviour
     {
         landingPagePanel.SetActive(false);
 
-        if (useSteam)
+        if (useSteam && SteamManager.Initialized)
         {
             SteamMatchmaking.CreateLobby(ELobbyType.k_ELobbyTypeFriendsOnly, 4);
             return;
