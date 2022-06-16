@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Mirror;
+using Steamworks;
 using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -11,6 +12,9 @@ namespace Networking
     {
         [SerializeField]
         private GameObject unitBasePrefab;
+
+        [SerializeField]
+        private bool useSteam = false;
 
         [SerializeField]
         private GameoverHandler gameOverHandlerPrefab;
@@ -66,7 +70,10 @@ namespace Networking
 
             RTSPlayer player = conn.identity.GetComponent<RTSPlayer>();
             Players.Add(player.GetUUID(), player);
-            player.SetDisplayName($"Player {Players.Count}");
+
+            player.SetDisplayName(
+                useSteam ? SteamFriends.GetPersonaName() : $"Player {Players.Count}"
+            );
             player.SetTeamColor(
                 (
                     new Color(

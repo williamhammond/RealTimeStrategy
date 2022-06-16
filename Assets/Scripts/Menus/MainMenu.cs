@@ -16,16 +16,14 @@ public class MainMenu : MonoBehaviour
 
     private void Start()
     {
-        if (!useSteam)
+        if (useSteam)
         {
-            return;
+            lobbyCreated = Callback<LobbyCreated_t>.Create(OnLobbyCreated);
+            gameLobbyJoinRequested = Callback<GameLobbyJoinRequested_t>.Create(
+                OnGameLobbyJoinRequested
+            );
+            lobbyEntered = Callback<LobbyEnter_t>.Create(OnLobbyEntered);
         }
-
-        lobbyCreated = Callback<LobbyCreated_t>.Create(OnLobbyCreated);
-        gameLobbyJoinRequested = Callback<GameLobbyJoinRequested_t>.Create(
-            OnGameLobbyJoinRequested
-        );
-        lobbyEntered = Callback<LobbyEnter_t>.Create(OnLobbyEntered);
     }
 
     public void HostLobby()
