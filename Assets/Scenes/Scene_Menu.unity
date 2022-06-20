@@ -436,7 +436,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 933997983}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ea368fb6f27ec2f40a40e20977992b9c, type: 3}
   m_Name: 
@@ -447,6 +447,18 @@ MonoBehaviour:
   AllowSteamRelay: 1
   UseNextGenSteamNetworking: 1
   SteamUserID: 0
+--- !u!114 &933997988 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3948623074772902701, guid: ee310a01c5a54fe42a9fdb75a3470319,
+    type: 3}
+  m_PrefabInstance: {fileID: 1620308183}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 933997983}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6b0fecffa3f624585964b0d0eb21b18e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1620308183
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -457,18 +469,18 @@ PrefabInstance:
     - target: {fileID: 3948623074772902701, guid: ee310a01c5a54fe42a9fdb75a3470319,
         type: 3}
       propertyPath: m_Enabled
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5672137450408894436, guid: ee310a01c5a54fe42a9fdb75a3470319,
         type: 3}
       propertyPath: useSteam
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5672137450408894436, guid: ee310a01c5a54fe42a9fdb75a3470319,
         type: 3}
       propertyPath: transport
       value: 
-      objectReference: {fileID: 933997987}
+      objectReference: {fileID: 933997988}
     - target: {fileID: 5672137450408894438, guid: ee310a01c5a54fe42a9fdb75a3470319,
         type: 3}
       propertyPath: m_RootOrder
@@ -591,6 +603,11 @@ PrefabInstance:
     - target: {fileID: 2618657761780688976, guid: 943ebba0007986c4eaa1dce73bc6316a,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2618657761780688977, guid: 943ebba0007986c4eaa1dce73bc6316a,
+        type: 3}
+      propertyPath: useSteam
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2618657761780688991, guid: 943ebba0007986c4eaa1dce73bc6316a,
