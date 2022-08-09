@@ -36,19 +36,19 @@ namespace Buildings
         private float unitSpawnDuration = 5f;
 
         [SyncVar(hook = nameof(ClientHandleQueuedUnitsUpdated))]
-        private int queuedUnits;
+        private int _queuedUnits;
 
         [SyncVar]
-        private float unitTimer;
+        private float _unitTimer;
 
-        private RTSPlayer player;
-        private float progressImageVelocity;
+        private RTSPlayer _player;
+        private float _progressImageVelocity;
 
         private void Update()
         {
-            if (player == null)
+            if (_player == null)
             {
-                player = NetworkClient.connection.identity.GetComponent<RTSPlayer>();
+                _player = NetworkClient.connection.identity.GetComponent<RTSPlayer>();
             }
             if (isServer)
             {
@@ -75,11 +75,11 @@ namespace Buildings
         [Server]
         private void ProduceUnits()
         {
-            if (queuedUnits == 0)
+            if (_queuedUnits == 0)
                 return;
 
-            unitTimer += Time.deltaTime;
-            if (unitTimer > unitSpawnDuration)
+            _unitTimer += Time.deltaTime;
+            if (_unitTimer > unitSpawnDuration)
             {
                 var unitInstance = Instantiate(
                     unitPrefab,
@@ -93,15 +93,15 @@ namespace Buildings
                 var unitMovement = unitInstance.GetUnitMovement();
                 unitMovement.ServerMove(unitSpawnPoint.position + spawnOffset);
 
-                queuedUnits--;
-                unitTimer = 0f;
+                _queuedUnits--;
+                _unitTimer = 0f;
             }
         }
 
         [Command]
         private void CmdSpawnUnit()
         {
-            if (queuedUnits == maxUnitQueue)
+            if (_queuedUnits == maxUnitQueue)
             {
                 return;
             }
@@ -109,8 +109,8 @@ namespace Buildings
             var resources = connectionToClient.identity.GetComponent<RTSPlayer>().GetResources();
             if (resources >= unitPrefab.GetCost())
             {
-                queuedUnits++;
-                player.SetResources(player.GetResources() - unitPrefab.GetCost());
+                _queuedUnits++;
+                _player.SetResources(_player.GetResources() - unitPrefab.GetCost());
             }
         }
 
@@ -130,7 +130,7 @@ namespace Buildings
 
         private void UpdateTimerDisplay()
         {
-            var newProgress = unitTimer / unitSpawnDuration;
+            var newProgress = _unitTimer / unitSpawnDuration;
             if (newProgress < unitProgressImage.fillAmount)
             {
                 unitProgressImage.fillAmount = newProgress;
@@ -140,7 +140,7 @@ namespace Buildings
                 unitProgressImage.fillAmount = Mathf.SmoothDamp(
                     unitProgressImage.fillAmount,
                     newProgress,
-                    ref progressImageVelocity,
+                    ref _progressImageVelocity,
                     0.1f
                 );
             }

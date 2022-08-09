@@ -11,7 +11,7 @@ namespace Buildings
     public class BuildingButton : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
     {
         [SerializeField]
-        private Building _building;
+        private Building building;
 
         [SerializeField]
         private Image iconImage;
@@ -22,29 +22,29 @@ namespace Buildings
         [SerializeField]
         private LayerMask floorMask;
 
-        private Camera mainCamera;
-        private RTSPlayer player;
-        private GameObject buildingPreviewInstance;
-        private Renderer buildingRendererInstance;
-        private BoxCollider buildingCollider;
+        private Camera _mainCamera;
+        private RTSPlayer _player;
+        private GameObject _buildingPreviewInstance;
+        private Renderer _buildingRendererInstance;
+        private BoxCollider _buildingCollider;
 
         private static readonly int BaseColor = Shader.PropertyToID("_BaseColor");
 
         private void Start()
         {
-            mainCamera = Camera.main;
+            _mainCamera = Camera.main;
 
-            iconImage.sprite = _building.GetIcon();
-            priceText.text = _building.GetPrice().ToString();
+            iconImage.sprite = building.GetIcon();
+            priceText.text = building.GetPrice().ToString();
 
-            player = NetworkClient.connection.identity.GetComponent<RTSPlayer>();
+            _player = NetworkClient.connection.identity.GetComponent<RTSPlayer>();
 
-            buildingCollider = _building.GetComponent<BoxCollider>();
+            _buildingCollider = building.GetComponent<BoxCollider>();
         }
 
         private void Update()
         {
-            if (buildingPreviewInstance)
+            if (_buildingPreviewInstance)
             {
                 UpdateBuildingPreview();
             }
@@ -57,54 +57,54 @@ namespace Buildings
                 return;
             }
 
-            if (player.GetResources() < _building.GetPrice())
+            if (_player.GetResources() < building.GetPrice())
             {
                 return;
             }
 
-            buildingPreviewInstance = Instantiate(_building.GetBuildingPreview());
-            buildingRendererInstance = buildingPreviewInstance.GetComponentInChildren<Renderer>();
+            _buildingPreviewInstance = Instantiate(building.GetBuildingPreview());
+            _buildingRendererInstance = _buildingPreviewInstance.GetComponentInChildren<Renderer>();
 
-            buildingPreviewInstance.SetActive(false);
+            _buildingPreviewInstance.SetActive(false);
         }
 
         public void OnPointerUp(PointerEventData eventData)
         {
-            if (buildingPreviewInstance == null)
+            if (_buildingPreviewInstance == null)
             {
                 return;
             }
 
-            var ray = mainCamera.ScreenPointToRay(Mouse.current.position.ReadValue());
+            var ray = _mainCamera.ScreenPointToRay(Mouse.current.position.ReadValue());
 
             if (Physics.Raycast(ray, out var hit, Mathf.Infinity, floorMask))
             {
-                player.CmdTryPlaceBuilding(_building.GetId(), hit.point);
+                _player.CmdTryPlaceBuilding(building.GetId(), hit.point);
             }
 
-            Destroy(buildingPreviewInstance);
+            Destroy(_buildingPreviewInstance);
         }
 
         private void UpdateBuildingPreview()
         {
-            var ray = mainCamera.ScreenPointToRay(Mouse.current.position.ReadValue());
+            var ray = _mainCamera.ScreenPointToRay(Mouse.current.position.ReadValue());
 
             if (!Physics.Raycast(ray, out var hit, Mathf.Infinity, floorMask))
             {
                 return;
             }
 
-            buildingPreviewInstance.transform.position = hit.point;
+            _buildingPreviewInstance.transform.position = hit.point;
 
-            if (!buildingPreviewInstance.activeSelf)
+            if (!_buildingPreviewInstance.activeSelf)
             {
-                buildingPreviewInstance.SetActive(true);
+                _buildingPreviewInstance.SetActive(true);
             }
 
-            var color = player.CanPlaceBuilding(buildingCollider, hit.point)
+            var color = _player.CanPlaceBuilding(_buildingCollider, hit.point)
               ? Color.green
               : Color.red;
-            buildingRendererInstance.material.SetColor(BaseColor, color);
+            _buildingRendererInstance.material.SetColor(BaseColor, color);
         }
     }
 }

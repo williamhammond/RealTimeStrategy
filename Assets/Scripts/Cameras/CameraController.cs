@@ -22,38 +22,36 @@ namespace Cameras
         [SerializeField]
         private Vector2 screenZLimits = Vector2.zero;
 
-        private Vector2 previousInput;
+        private Controls _controls;
 
-        private Controls controls;
-
-        public override void OnStartAuthority()
-        {
-            playerCameraTransform.gameObject.SetActive(true);
-
-            controls = new Controls();
-
-            controls.Player.MoveCamera.performed += SetPreviousInput;
-            controls.Player.MoveCamera.canceled += SetPreviousInput;
-
-            controls.Enable();
-        }
+        private Vector2 _previousInput;
 
         [ClientCallback]
         private void Update()
         {
             if (!hasAuthority || !Application.isFocused)
-            {
                 return;
-            }
 
             UpdateCameraPosition();
+        }
+
+        public override void OnStartAuthority()
+        {
+            playerCameraTransform.gameObject.SetActive(true);
+
+            _controls = new Controls();
+
+            _controls.Player.MoveCamera.performed += SetPreviousInput;
+            _controls.Player.MoveCamera.canceled += SetPreviousInput;
+
+            _controls.Enable();
         }
 
         private void UpdateCameraPosition()
         {
             var position = playerCameraTransform.position;
 
-            if (previousInput == Vector2.zero)
+            if (_previousInput == Vector2.zero)
             {
                 var cursorMovement = Vector3.zero;
 
@@ -82,7 +80,7 @@ namespace Cameras
             else
             {
                 position +=
-                    new Vector3(previousInput.x, 0f, previousInput.y) * (speed * Time.deltaTime);
+                    new Vector3(_previousInput.x, 0f, _previousInput.y) * (speed * Time.deltaTime);
             }
 
             position.x = Mathf.Clamp(position.x, screenXLimits.x, screenXLimits.y);
@@ -93,7 +91,7 @@ namespace Cameras
 
         private void SetPreviousInput(InputAction.CallbackContext ctx)
         {
-            previousInput = ctx.ReadValue<Vector2>();
+            _previousInput = ctx.ReadValue<Vector2>();
         }
     }
 }

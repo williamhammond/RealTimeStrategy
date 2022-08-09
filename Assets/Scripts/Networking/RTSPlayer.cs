@@ -10,10 +10,10 @@ namespace Networking
     public class RTSPlayer : NetworkBehaviour
     {
         [SyncVar]
-        private string uuid;
+        private string _uuid;
 
         [SyncVar(hook = nameof(ClientHandleDisplayNameUpdated))]
-        private string displayName;
+        private string _displayName;
 
         [SerializeField]
         private Transform cameraTransform;
@@ -22,7 +22,7 @@ namespace Networking
         private Building[] buildings = Array.Empty<Building>();
 
         [SyncVar(hook = nameof(ClientHandleResourcesUpdated))]
-        private int resources = 500;
+        private int _resources = 500;
 
         [SerializeField]
         private LayerMask buildBlockLayer;
@@ -36,25 +36,25 @@ namespace Networking
         public static event Action<bool> AuthorityOnPartyOwnerStateUpdated;
 
         [SyncVar(hook = nameof(AuthorityHandlePartyOwnerStateUpdated))]
-        private bool isPartyOwner;
+        private bool _isPartyOwner;
 
-        private Color teamColor;
-        private readonly List<Unit> myUnits = new();
-        private readonly List<Building> myBuildings = new();
+        private Color _teamColor;
+        private readonly List<Unit> _myUnits = new();
+        private readonly List<Building> _myBuildings = new();
 
         public string GetUUID()
         {
-            return uuid;
+            return _uuid;
         }
 
         public string GetDisplayName()
         {
-            return displayName;
+            return _displayName;
         }
 
         public bool GetIsPartyOwner()
         {
-            return isPartyOwner;
+            return _isPartyOwner;
         }
 
         public Transform GetCameraTransform()
@@ -64,22 +64,22 @@ namespace Networking
 
         public List<Unit> GetUnits()
         {
-            return myUnits;
+            return _myUnits;
         }
 
         public List<Building> GetBuildings()
         {
-            return myBuildings;
+            return _myBuildings;
         }
 
         public Color GetTeamColor()
         {
-            return teamColor;
+            return _teamColor;
         }
 
         public int GetResources()
         {
-            return resources;
+            return _resources;
         }
 
         public bool CanPlaceBuilding(BoxCollider buildingCollider, Vector3 position)
@@ -92,7 +92,7 @@ namespace Networking
             );
 
             var inRange = false;
-            foreach (var building in myBuildings)
+            foreach (var building in _myBuildings)
             {
                 if (
                     (position - building.transform.position).sqrMagnitude
@@ -112,13 +112,13 @@ namespace Networking
         [Server]
         public void SetDisplayName(string newDisplayName)
         {
-            displayName = newDisplayName;
+            _displayName = newDisplayName;
         }
 
         [Server]
         public void SetPartyOwner(bool state)
         {
-            isPartyOwner = state;
+            _isPartyOwner = state;
         }
 
         public override void OnStartServer()
@@ -129,7 +129,7 @@ namespace Networking
             Building.ServerOnBuildingSpawned += ServerHandleBuildingSpawned;
             Building.ServerOnBuildingDespawned += ServerHandleBuildingDespawned;
 
-            uuid = Guid.NewGuid().ToString();
+            _uuid = Guid.NewGuid().ToString();
 
             DontDestroyOnLoad(gameObject);
         }
@@ -146,19 +146,19 @@ namespace Networking
         [Server]
         public void SetResources(int newResources)
         {
-            resources = newResources;
+            _resources = newResources;
         }
 
         [Server]
         public void SetTeamColor(Color newTeamColor)
         {
-            teamColor = newTeamColor;
+            _teamColor = newTeamColor;
         }
 
         [Command]
         public void CmdStartGame()
         {
-            if (!isPartyOwner)
+            if (!_isPartyOwner)
             {
                 return;
             }
@@ -184,7 +184,7 @@ namespace Networking
                 return;
             }
 
-            if (resources < buildingToPlace.GetPrice())
+            if (_resources < buildingToPlace.GetPrice())
             {
                 return;
             }
@@ -202,7 +202,7 @@ namespace Networking
             );
 
             NetworkServer.Spawn(buildingInstance, connectionToClient);
-            SetResources(resources - buildingToPlace.GetPrice());
+            SetResources(_resources - buildingToPlace.GetPrice());
         }
 
         private void ServerHandleUnitSpawned(Unit unit)
@@ -212,7 +212,7 @@ namespace Networking
                 return;
             }
 
-            myUnits.Add(unit);
+            _myUnits.Add(unit);
         }
 
         private void ServerHandleUnitDespawned(Unit unit)
@@ -222,7 +222,7 @@ namespace Networking
                 return;
             }
 
-            myUnits.Remove(unit);
+            _myUnits.Remove(unit);
         }
 
         private void ServerHandleBuildingSpawned(Building building)
@@ -232,7 +232,7 @@ namespace Networking
                 return;
             }
 
-            myBuildings.Add(building);
+            _myBuildings.Add(building);
         }
 
         private void ServerHandleBuildingDespawned(Building building)
@@ -242,7 +242,7 @@ namespace Networking
                 return;
             }
 
-            myBuildings.Remove(building);
+            _myBuildings.Remove(building);
         }
 
         #endregion
@@ -312,22 +312,22 @@ namespace Networking
 
         private void AuthorityHandleUnitSpawned(Unit unit)
         {
-            myUnits.Add(unit);
+            _myUnits.Add(unit);
         }
 
         private void AuthorityHandleUnitDespawned(Unit unit)
         {
-            myUnits.Remove(unit);
+            _myUnits.Remove(unit);
         }
 
         private void AuthorityHandleBuildingSpawned(Building building)
         {
-            myBuildings.Add(building);
+            _myBuildings.Add(building);
         }
 
         private void AuthorityHandleBuildingDespawned(Building building)
         {
-            myBuildings.Remove(building);
+            _myBuildings.Remove(building);
         }
 
         private void ClientHandleResourcesUpdated(int oldResources, int newResources)

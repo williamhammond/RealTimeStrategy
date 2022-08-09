@@ -17,16 +17,16 @@ namespace Cameras
         [SerializeField]
         private float offset = -6f;
 
-        private Transform playerCameraTransform;
+        private Transform _playerCameraTransform;
 
         private void Update()
         {
-            if (playerCameraTransform || !NetworkClient.connection.identity)
+            if (_playerCameraTransform || !NetworkClient.connection.identity)
             {
                 return;
             }
 
-            playerCameraTransform = NetworkClient.connection.identity
+            _playerCameraTransform = NetworkClient.connection.identity
                 .GetComponent<RTSPlayer>()
                 .GetCameraTransform();
         }
@@ -64,11 +64,11 @@ namespace Cameras
             );
             var newCameraPos = new Vector3(
                 Mathf.Lerp(-mapScale, mapScale, lerp.x),
-                playerCameraTransform.position.y,
+                _playerCameraTransform.position.y,
                 Mathf.Lerp(-mapScale, mapScale, lerp.y)
             );
 
-            playerCameraTransform.position = newCameraPos + new Vector3(0f, 0f, offset);
+            _playerCameraTransform.position = newCameraPos + new Vector3(0f, 0f, offset);
         }
     }
 }

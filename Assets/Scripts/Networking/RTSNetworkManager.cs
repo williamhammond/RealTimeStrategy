@@ -26,13 +26,13 @@ namespace Networking
 
         public Dictionary<string, RTSPlayer> Players { get; } = new();
 
-        private bool isGameInProgress;
+        private bool _isGameInProgress;
 
         #region Server
 
         public override void OnServerConnect(NetworkConnectionToClient conn)
         {
-            if (!isGameInProgress)
+            if (!_isGameInProgress)
             {
                 return;
             }
@@ -51,7 +51,7 @@ namespace Networking
         public override void OnStopServer()
         {
             Players.Clear();
-            isGameInProgress = false;
+            _isGameInProgress = false;
         }
 
         public void StartGame()
@@ -61,7 +61,7 @@ namespace Networking
                 return;
             }
 
-            isGameInProgress = true;
+            _isGameInProgress = true;
 
             ServerChangeScene("Scene_Map_Test");
         }
