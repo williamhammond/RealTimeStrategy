@@ -6,7 +6,7 @@ namespace Buildings
 {
     public class GameoverHandler : NetworkBehaviour
     {
-        private readonly List<UnitBase> bases = new();
+        private readonly List<UnitBase> _bases = new();
 
         public static event Action<string> ClientOnGameOver;
         public static event Action ServerOnGameOver;
@@ -27,16 +27,16 @@ namespace Buildings
         [Server]
         private void ServerHandleBaseSpawned(UnitBase unitBase)
         {
-            bases.Add(unitBase);
+            _bases.Add(unitBase);
         }
 
         [Server]
         private void ServerHandleBaseDespawned(UnitBase unitBase)
         {
-            bases.Remove(unitBase);
-            if (bases.Count < 2)
+            _bases.Remove(unitBase);
+            if (_bases.Count < 2)
             {
-                var playerId = bases[0].connectionToClient.connectionId;
+                var playerId = _bases[0].connectionToClient.connectionId;
                 RpcGameOver($"Player {playerId}");
                 ServerOnGameOver?.Invoke();
             }

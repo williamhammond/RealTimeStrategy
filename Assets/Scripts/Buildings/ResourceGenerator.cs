@@ -16,13 +16,13 @@ namespace Buildings
         [SerializeField]
         private float interval = 1f;
 
-        private float timer;
-        private RTSPlayer player;
+        private float _timer;
+        private RTSPlayer _player;
 
         public override void OnStartServer()
         {
-            timer = interval;
-            player = connectionToClient.identity.GetComponent<RTSPlayer>();
+            _timer = interval;
+            _player = connectionToClient.identity.GetComponent<RTSPlayer>();
 
             health.ServerOnDie += ServerHandleDie;
             GameoverHandler.ServerOnGameOver += ServerHandleGameOver;
@@ -37,12 +37,12 @@ namespace Buildings
         [Server]
         private void Update()
         {
-            timer -= Time.deltaTime;
-            if (timer <= 0)
+            _timer -= Time.deltaTime;
+            if (_timer <= 0)
             {
-                player.SetResources(player.GetResources() + resourcesPerInterval);
+                _player.SetResources(_player.GetResources() + resourcesPerInterval);
 
-                timer += interval;
+                _timer += interval;
             }
         }
 

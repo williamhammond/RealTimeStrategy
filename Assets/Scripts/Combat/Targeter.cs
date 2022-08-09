@@ -6,11 +6,11 @@ namespace Combat
 {
     public class Targeter : NetworkBehaviour
     {
-        private Targetable target;
+        private Targetable _target;
 
         public Targetable GetTarget()
         {
-            return target;
+            return _target;
         }
 
         #region Server
@@ -37,13 +37,13 @@ namespace Combat
             {
                 return;
             }
-            target = newTarget;
+            _target = newTarget;
         }
 
         [Server]
         public void ClearTarget()
         {
-            target = null;
+            _target = null;
         }
         #endregion
     }
