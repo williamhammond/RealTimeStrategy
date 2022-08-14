@@ -72,12 +72,18 @@ namespace Networking
 
             var player = conn.identity.GetComponent<RTSPlayer>();
             Players.Add(player.GetUUID(), player);
+            if (useSteam && SteamManager.Initialized)
+            {
+                if (NetworkServer.active)
+                {
+                    player.SetDisplayName(SteamFriends.GetPersonaName());
+                }
+            }
+            else
+            {
+                player.SetDisplayName($"Player {Players.Count}");
+            }
 
-            player.SetDisplayName(
-                useSteam && SteamManager.Initialized
-                  ? SteamFriends.GetPersonaName()
-                  : $"Player {Players.Count}"
-            );
             player.SetTeamColor(
                 new Color(Random.Range(0f, 1f), Random.Range(0f, 1f), Random.Range(0f, 1f))
             );
