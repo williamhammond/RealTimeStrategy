@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Buildings;
 using Mirror;
+using Steamworks;
 using Units;
 using UnityEngine;
 
@@ -9,26 +10,21 @@ namespace Networking
 {
     public class RTSPlayer : NetworkBehaviour
     {
-        [SyncVar]
-        private string _uuid;
+        [SyncVar] private string _uuid;
 
         [SyncVar(hook = nameof(ClientHandleDisplayNameUpdated))]
         private string _displayName;
 
-        [SerializeField]
-        private Transform cameraTransform;
+        [SerializeField] private Transform cameraTransform;
 
-        [SerializeField]
-        private Building[] buildings = Array.Empty<Building>();
+        [SerializeField] private Building[] buildings = Array.Empty<Building>();
 
         [SyncVar(hook = nameof(ClientHandleResourcesUpdated))]
         private int _resources = 500;
 
-        [SerializeField]
-        private LayerMask buildBlockLayer;
+        [SerializeField] private LayerMask buildBlockLayer;
 
-        [SerializeField]
-        private float buildingRangeLimit = 5f;
+        [SerializeField] private float buildingRangeLimit = 5f;
 
         public event Action<int> ClientOnResourcesUpdated;
 
@@ -167,6 +163,12 @@ namespace Networking
         }
 
         [Command]
+        public void CmdUpdateName(String name)
+        {
+            SetDisplayName(name);
+        }
+
+        [Command]
         public void CmdTryPlaceBuilding(int buildingId, Vector3 position)
         {
             Building buildingToPlace = null;
@@ -244,6 +246,7 @@ namespace Networking
 
             _myBuildings.Remove(building);
         }
+        
 
         #endregion
 
@@ -260,6 +263,7 @@ namespace Networking
             {
                 return;
             }
+            CmdUpdateName(SteamFriends.GetPersonaName());
 
             Unit.AuthorityOnUnitSpawned += AuthorityHandleUnitSpawned;
             Unit.AuthorityOnUnitDespawned += AuthorityHandleUnitDespawned;
@@ -274,9 +278,11 @@ namespace Networking
             {
                 return;
             }
-
+            CmdUpdateName(SteamFriends.GetPersonaName());
             DontDestroyOnLoad(gameObject);
             ((RTSNetworkManager)NetworkManager.singleton).Players.Add(GetUUID(), this);
+            
+            ClientOnInfoUpdated?.Invoke();
         }
 
         public override void OnStopClient()
