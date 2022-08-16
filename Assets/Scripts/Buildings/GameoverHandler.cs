@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Mirror;
+using Networking;
 
 namespace Buildings
 {
@@ -36,8 +37,8 @@ namespace Buildings
             _bases.Remove(unitBase);
             if (_bases.Count < 2)
             {
-                var playerId = _bases[0].connectionToClient.connectionId;
-                RpcGameOver($"Player {playerId}");
+                var player = _bases[0].connectionToClient.identity.GetComponent<RTSPlayer>();
+                RpcGameOver($"Player {player.GetDisplayName()}");
                 ServerOnGameOver?.Invoke();
             }
         }
